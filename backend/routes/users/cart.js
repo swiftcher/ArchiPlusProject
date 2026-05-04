@@ -14,7 +14,7 @@ router.post('/', verifyToken, (req, res) => {
     const Quantity = req.body.Quantity;
 
     const U_ID = req.user.U_ID;
-    console.log("bb" + P_ID,Quantity,U_ID);
+    
 
     const checkSql = `
         SELECT * FROM Cart 
@@ -29,7 +29,7 @@ router.post('/', verifyToken, (req, res) => {
             });
         }
 
-        // If product already in cart → update quantity
+        // If product already in cart :update quantity
         if (result.length > 0) {
             const updateSql = `
                 UPDATE Cart
@@ -52,7 +52,7 @@ router.post('/', verifyToken, (req, res) => {
             });
         }
 
-        // If not exists → insert new
+        // If not exists: insert new
         const insertSql = `
             INSERT INTO Cart (U_ID, P_ID, Quantity)
             VALUES (?, ?, ?)

@@ -44,26 +44,24 @@ router.post('/login', (req, res) => {
         if (result.length === 0) {
             return res.status(404).json({ message: "User not found" });
         }
-
+        // getting to this line means we found only matched mail yet
         const user = result[0];
-        console.log(user);
+        
 
-        // FIX 1: clean password
+        // clean password
         const cleanPassword = password.trim();
 
-        // FIX 2: compare correctly
+        //compare passwords 
         const isMatch = await bcrypt.compare(cleanPassword,user.U_Password);
-        console.log(cleanPassword);
-        console.log(user.U_Password);
         
         if (!isMatch) {
             return res.status(401).json({ message: "Wrong password!" });
         }
-
+        // getting to this line means valid email and passwords
         // CREATE TOKEN
         const token = jwt.sign(
             {
-                U_ID: user.U_ID,   // ⚠️ IMPORTANT FIX (see below)
+                U_ID: user.U_ID,  
                 email: user.U_Email,
                 role: user.U_Role
             },
@@ -73,7 +71,8 @@ router.post('/login', (req, res) => {
 
         res.json({
             message: "Login successful",
-            token
+            token,
+            U_Name: user.U_Name
         });
     });
 });

@@ -33,7 +33,7 @@ router.get('/', verifyToken, (req, res) => {
 
             return res.json({
                 success: true,
-                data: result[0] // 👈 important fix
+                data: result[0] 
             });
         });
 
