@@ -1,0 +1,89 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 25px;
+    background: #111827;
+    color: white;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* LOGO */
+.logo a {
+    color: #38bdf8;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* NAV */
+.nav {
+    display: flex;
+    gap: 18px;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav a:hover {
+    color: #38bdf8;
+}
+
+/* SEARCH */
+.search-box input {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    width: 180px;
+}
+
+/* PROFILE */
+.profile-section {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-icon {
+    font-size: 22px;
+}
+
+/* DROPDOWN */
+.profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 35px;
+
+    background: white;
+    color: black;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 8px;
+
+    min-width: 140px;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.profile-dropdown a,
+.profile-dropdown span {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.profile-dropdown a:hover,
+.profile-dropdown span:hover {
+    color: #38bdf8;
+}
