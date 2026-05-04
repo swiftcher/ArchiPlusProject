@@ -1,11 +1,21 @@
 .carousel {
-    display: flex;
-    overflow-x: auto;
-    gap: 10px;
-    padding: 10px;
-    scroll-behavior: smooth;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
 }
 
+/* hide scrollbar (clean UI) */
 .carousel::-webkit-scrollbar {
-    display: none;
+  display: none;
+}
+.carousel {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* each card should not shrink */
+.carousel > * {
+  flex: 0 0 auto;
 }
