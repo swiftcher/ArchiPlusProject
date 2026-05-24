@@ -4,24 +4,23 @@ import "./header.css";
 
 import { AuthContext } from "../../context/AuthContext";
 import { ProductContext } from "../../context/ProductContext";
+import logo from "../../assets/logo.svg";
 
 function Header() {
-  
+
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const { search, setSearch } = useContext(ProductContext);
   const navigate = useNavigate();
 
-  const { auth, logout } = useContext(AuthContext);
+  const { token, user, logout } = useContext(AuthContext);
 
-  const isLoggedIn = !!auth?.token;
+
+  const isLoggedIn = !!token && !!user;
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      navigate("/home");
-    
-
-      
+      navigate("/categories");
     }
   };
 
@@ -41,7 +40,9 @@ function Header() {
 
       {/* LOGO */}
       <div className="logo">
-        <Link to="/home">ArchiPlus</Link>
+        <Link to="/home">
+          <img src={logo} alt="ArchiPlus logo" />
+        </Link>
       </div>
 
       {/* NAV */}
@@ -61,45 +62,64 @@ function Header() {
         />
       </div>
 
-      {/* PROFILE */}
-      <div className="profile-section">
+      {/* RIGHT SIDE */}
+      <div className="header-right">
 
+        {/* CART */}
         <div
-          className="profile-icon"
-          onClick={() => setShowProfileMenu(!showProfileMenu)}
+          className="cart-icon"
+          onClick={() => navigate("/cart")}
         >
-          👤
+          🛍️
         </div>
+
+        {/* messages */}
         {isLoggedIn && (
-          <div>
-            <p> hello {auth?.U_Name}</p>
+          <i div
+          className="message-icon"
+          onClick={() => navigate("/messenger")}
+        >
+          📩
+        </i>
+            
+          )}
+
+        {/* PROFILE */}
+        <div className="profile-section">
+
+          <div
+            className="profile-icon"
+            onClick={() => setShowProfileMenu(!showProfileMenu)}
+          >
+            👤
           </div>
 
-        )}
+          {isLoggedIn && (
+            <p className="user-greeting">
+              Hello {user?.name}
+            </p>
+          )}
 
-        {showProfileMenu && (
-          <div className="profile-dropdown">
+          {showProfileMenu && (
+            <div className="profile-dropdown">
 
-          
+              {isLoggedIn && (
+                <>
+                  <Link to="/myprofile">My Profile</Link>
+                  <Link to="/myOrders">My Orders</Link>
+                </>
+              )}
 
-            <Link to="/profile">My Profile</Link>
-            <Link to="/myOrders">My Orders</Link>
+              {isLoggedIn ? (
+                <span onClick={handleLogout}>Logout</span>
+              ) : (
+                <span onClick={handleLogin}>Login</span>
+              )}
 
-          
+            </div>
+          )}
 
-            {/* AUTH CONTROL */}
-            {isLoggedIn ? (
-              <span className="logout" onClick={handleLogout}>
-                Logout
-              </span>
-            ) : (
-              <span onClick={handleLogin}>
-                Login
-              </span>
-            )}
-
-          </div>
-        )}
+        </div>
 
       </div>
 

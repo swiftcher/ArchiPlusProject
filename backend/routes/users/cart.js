@@ -77,7 +77,7 @@ router.post('/', verifyToken, (req, res) => {
 
 // GET USER CART 
 
-router.get('/', verifyToken, (req, res) => {
+router.get('/userCart', verifyToken, (req, res) => {
     const U_ID = req.user.U_ID;
     console.log(U_ID);
 

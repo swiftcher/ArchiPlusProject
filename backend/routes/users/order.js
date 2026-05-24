@@ -27,6 +27,14 @@ router.get('/', verifyToken, (req, res) => {
                 }
             });
         }
+         if(result.length == 0)
+        {
+            return res.json({
+                success: true,
+                message: "no orders found"
+
+            })
+        }
 
         return res.json({
             success: true,
@@ -146,6 +154,7 @@ router.get('/:id', verifyToken, (req, res) => {
                 }
             });
         }
+       
 
         return res.json({
             success: true,

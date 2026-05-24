@@ -1,0 +1,57 @@
+
+/* COMMON STATE CONTAINER */
+.cart-state {
+    height: 60vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: #e90a36;
+}
+
+/* ICON / TITLE */
+.cart-state h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+/* TEXT */
+.cart-state p {
+    font-size: 14px;
+    color: #6e737c;
+    margin-bottom: 16px;
+}
+
+/* BUTTON */
+.cart-state button {
+    padding: 10px 18px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #38bdf8;
+    color: #0f172a;
+
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.cart-state button:hover {
+    background: #0ea5e9;
+    transform: scale(1.05);
+}
+
+/* EMPTY SPECIAL LOOK */
+.cart-state.empty {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+
+    padding: 40px;
+}

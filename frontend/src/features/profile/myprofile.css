@@ -1,0 +1,106 @@
+.profile {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f9fafc, #eef1f6);
+}
+
+/* SIDEBAR */
+.profile-sidebar {
+  width: 220px;
+  background: #021329;
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-logo {
+  margin-bottom: 30px;
+  font-size: 20px;
+}
+
+.profile-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-sidebar button {
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  text-align: left;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.profile-sidebar button:hover {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.profile-sidebar button.active {
+  background: white;
+  color: #021329;
+  font-weight: bold;
+}
+
+/* CONTENT */
+.profile-content {
+  flex: 1;
+  padding: 40px;
+}
+
+/* CARD */
+.profile-card {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.profile-card h2 {
+  margin-bottom: 20px;
+}
+
+/* FORM */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-form label {
+  margin: 10px 0 5px;
+  font-size: 14px;
+}
+
+.profile-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.2s;
+}
+
+.profile-form input:focus {
+  border-color: #021329;
+}
+
+/* BUTTON */
+.profile-form button {
+  margin-top: 20px;
+  padding: 12px;
+  background: #021329;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.profile-form button:hover {
+  background: #0a2a5c;
+}

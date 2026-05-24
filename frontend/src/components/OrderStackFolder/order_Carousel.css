@@ -1,0 +1,11 @@
+.order-carousel {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 10px;
+    scroll-behavior: smooth;
+}
+
+.order-carousel::-webkit-scrollbar {
+    display: none;
+}
