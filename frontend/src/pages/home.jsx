@@ -1,11 +1,33 @@
 import ProductCarousel from "../components/CarouselFolder/Carousel";
-import { useContext } from "react";
+import { useContext,useEffect,useState } from "react";
 import { ProductContext } from "../context/ProductContext";
 import "./home.css";
 import convo from "../assets/convo.jpg";
+import apiPrivate from "../api/apiPrivate";
 
 
 export default function Home() {
+  const [cart, setCart] = useState([]);
+
+useEffect(() => {
+
+    const loadCart = async () => {
+
+        try {
+
+            const res = await apiPrivate.get("cart/userCart");
+
+            setCart(res.data?.data || []);
+
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    loadCart();
+
+}, []);
+
   const { products } = useContext(ProductContext);
 
   const homeProducts = [...products].sort((a, b) =>
@@ -15,6 +37,8 @@ export default function Home() {
   // simple split for demo (you can replace later with real data)
   const featuredProducts = homeProducts.slice(0, 10);
   const newProducts = homeProducts.slice(10, 16);
+
+
 
   return (
     <div className="home">
@@ -39,13 +63,13 @@ export default function Home() {
       {/* FEATURED */}
       <section className="home-section">
         <h2 className="home-title">Featured Products</h2>
-        <ProductCarousel products={featuredProducts} />
+        <ProductCarousel products={featuredProducts} cart={cart} />
       </section>
 
       {/* NEW ARRIVALS */}
       <section className="home-section">
         <h2 className="home-title">New Arrivals</h2>
-        <ProductCarousel products={newProducts} />
+        <ProductCarousel products={newProducts} cart={cart} />
       </section>
 
     </div>

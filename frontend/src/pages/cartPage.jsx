@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import Cart from "../components/cartFolder/cart";
 import { AuthContext } from "../context/AuthContext";
+import apiPrivate from "../api/apiPrivate";
 
 export default function Checkout() {
   const { auth } = useContext(AuthContext);
@@ -19,11 +20,7 @@ export default function Checkout() {
 
     setLoading(true);
 
-    const res = await fetch("http://localhost:5000/api/cart", {
-      headers: {
-        Authorization: `Bearer ${auth?.token}`
-      }
-    });
+    const res = await apiPrivate.get("/cart");
 
     const data = await res.json();
     setCart(data.data || []);
@@ -39,23 +36,16 @@ export default function Checkout() {
   }, 0);
 
   const handleCheckout = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/api/cart", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${auth?.token}`
+        try {
+          const res = await apiPrivate.post("/cart");
+
+          console.log(res.data);
+
+          setCart([]); // clear UI after checkout
+        } catch (err) {
+          console.error("Checkout error:", err);
         }
-      });
-
-      const data = await res.json();
-      console.log(data);
-
-      setCart([]); // clear UI after checkout
-    } catch (err) {
-      console.error("Checkout error:", err);
-    }
-  };
+      };
 
   if (loading) return <p>Loading...</p>;
 

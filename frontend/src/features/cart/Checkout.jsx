@@ -1,16 +1,20 @@
 import Cart from "../../components/cartFolder/cart";
 import { useCartViewModel } from "../cart/cartViewModel";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import "./checkout.css"
 
 export default function Checkout() {
+    const [summaryOpen, setSummaryOpen] = useState(false);
     const navigate = useNavigate();
 
     const {
         token,
         cart,
         loading,
-        total,
+        reloadCart,
+        totalQuantity,
+        
         handleCheckout
     } = useCartViewModel();
 
@@ -41,6 +45,14 @@ if (cart.length === 0) {
         </div>
     );
 }
+const itemTotal = (item) => {
+    return Number(item.P_Price) * Number(item.Quantity);
+};
+
+const grandTotal = cart.reduce((sum, item) => {
+    return sum + itemTotal(item);
+}, 0);
+
     
 
     return (
@@ -48,18 +60,69 @@ if (cart.length === 0) {
 
             <h1>Checkout</h1>
 
-            <Cart items={cart} />
-            
+            <Cart items={cart} itemTotal={itemTotal} reloadCart={reloadCart} />
+            <div className="cart-summary">
 
-            <h2>Total: ${total}</h2>
+            <h3>Order Summary</h3>
+
+            <p>Total: ${grandTotal.toFixed(2)}</p>
 
             <button
                 className="checkout-btn"
                 onClick={handleCheckout}
             >
-                Place Order
+                Checkout
             </button>
 
+            </div>
+<div className="summary-wrapper">
+
+   <button
+    className="summary-toggle"
+    onClick={() => {
+        setSummaryOpen(prev => !prev);
+        reloadCart();
+    }}
+    title="Toggle Summary"
+>
+    🧾
+</button>
+    {/* panel */}
+    <div className={`summary-panel ${summaryOpen ? "open" : ""}`}>
+
+        <h3>Order Summary</h3>
+
+        <div className="summary-row">
+            <span>Items</span>
+            <span>{totalQuantity}</span>
         </div>
+
+        <div className="summary-row">
+            <span>Total</span>
+            <span>${grandTotal.toFixed(2)}</span>
+        </div>
+
+        <div className="summary-row">
+            <span>Shipping</span>
+            <span>Free</span>
+        </div>
+
+        <div className="summary-total">
+            <span>Final</span>
+            <span>${grandTotal.toFixed(2)}</span>
+        </div>
+
+        <button onClick={handleCheckout}>
+            Checkout
+        </button>
+
+    </div>
+</div>
+
+        
+
+        </div>
+
+        
     );
 }

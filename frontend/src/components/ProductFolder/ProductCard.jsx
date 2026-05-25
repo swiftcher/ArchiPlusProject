@@ -10,6 +10,7 @@ function ProductCard({
     P_Description,
     P_Picture,
     P_Stock,
+    Quantity
     
 }) {
     
@@ -36,6 +37,7 @@ function ProductCard({
                 <QuantityCard
                     stock={P_Stock}
                     P_ID={P_ID}
+                    Quantity={Quantity}
                       
                     
                 />

@@ -1,59 +1,75 @@
 import { useState } from "react";
 import Button from "../ButtonFolder/Button";
 import "./quantityCards.css";
+import apiPrivate from "../../api/apiPrivate";
 
-function QuantityAddToCart({ stock = 1, P_ID }) {
+
+function QuantityAddToCart({ stock , P_ID,Quantity,reloadCart  }) {
 
     const [cartItem, setCartItem] = useState({
         P_ID: P_ID,
-        Quantity: 1
+        Quantity: Quantity,
+        increment:1
+        
     });
+    
+  
     
 
     const increase = () => {
-        if (cartItem.Quantity < stock) {
-            setCartItem({
-                ...cartItem,
-                Quantity: cartItem.Quantity + 1
-            });
-        }
+        setCartItem(prev => {
+            
+
+            if (prev.increment < stock) {
+                return { ...prev, increment: prev.increment+ 1 };
+            }
+            return prev;
+        });
     };
 
     const decrease = () => {
-        if (cartItem.Quantity > 1) {
-            setCartItem({
-                ...cartItem,
-                Quantity: cartItem.Quantity - 1
-            });
-        }
+        setCartItem(prev => {
+            if (prev.increment > 1) {
+                return { ...prev, increment: prev.increment - 1 };
+            }
+            return prev;
+        });
     };
 
     // ✅ THIS is your "handleSubmit style"
-    const handleAdd = async () => {
+   const handleAdd = async () => {
+  try {
 
-        const token = localStorage.getItem("token");
+    const newQty = cartItem.Quantity + cartItem.increment;
+    console.log(newQty )
 
-        const res = await fetch("http://localhost:5000/api/cart", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(cartItem)
-        });
+    
+    if (newQty > stock)
+        {
+            console.log("no enough in stock - quantitycard log")
+             return ;
 
-        const data = await res.json();
-        console.log(data);
-    };
+        }
 
+    const res = await apiPrivate.post("/cart", cartItem);
+    setCartItem(prev => ({
+    ...prev,
+    Quantity: newQty
+    })); 
+    reloadCart?.();
+    
+
+    console.log(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+};
     return (
         <div className="qty-wrapper">
 
             <div className="qty-control">
                 <button onClick={decrease}>-</button>
-
-                <span>{cartItem.Quantity}</span>
-
+                <span>{cartItem.increment}</span>
                 <button onClick={increase}>+</button>
             </div>
 

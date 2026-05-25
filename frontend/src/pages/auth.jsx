@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import api from "../api/axios";
+import apiPublic from "../api/apiPublic";
 import Button from "../components/ButtonFolder/Button";
 import "./auth.css"
 
@@ -31,7 +31,7 @@ const handleSubmit = async (e) => {
   try {
     if (isRegister) {
       // REGISTER
-      await api.post("/auth/register", {
+      await apiPublic.post("/auth/register", {
         name: form.name,
         lastName: form.lastName,
         email: form.email,
@@ -43,7 +43,7 @@ const handleSubmit = async (e) => {
 
     } else {
       // LOGIN
-      const res = await api.post("/auth/login", {
+      const res = await apiPublic.post("/auth/login", {
         email: form.email,
         password: form.password
       });

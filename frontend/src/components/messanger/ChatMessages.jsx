@@ -1,12 +1,23 @@
 import "./chatMessages.css";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function ChatMessages({ messages }) {
     const { user } = useContext(AuthContext);
+    
+    const containerRef = useRef(null);
+
+useEffect(() => {
+
+    if (!containerRef.current) return;
+
+    containerRef.current.scrollTop =
+        containerRef.current.scrollHeight;
+
+}, [messages]);
 
     return (
-        <div className="chat-messages-container">
+        <div className="chat-messages-container" ref={containerRef}>
 
             {messages.map((message) => {
 
@@ -40,7 +51,8 @@ export default function ChatMessages({ messages }) {
                     </div>
                 );
             })}
-
+        
         </div>
+        
     );
 }

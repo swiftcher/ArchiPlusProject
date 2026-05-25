@@ -1,24 +1,16 @@
 import CartItem from "../cartItemFolder/CartItem";
 import "./cart.css";
-
-function Cart({items}) {
-
-    
-
+function Cart({ items, itemTotal,reloadCart }) {
     return (
-        <div className="cart-page">
-
-            <h2>Your Cart</h2>
-
-            <div className="cart-list">
-                {items.map((item) => (
-                    <CartItem
-                        key={item.P_ID}
-                        {...item}
-                    />
-                ))}
-            </div>
-
+        <div className="cart-list">
+            {items.map(item => (
+                <CartItem
+                    key={item.Cart_ID}
+                    {...item}
+                    itemTotal={itemTotal(item)}
+                    reloadCart = {reloadCart}
+                />
+            ))}
         </div>
     );
 }

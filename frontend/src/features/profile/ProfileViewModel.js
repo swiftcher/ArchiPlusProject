@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import api from "../../api/axios";
+import apiPrivate from "../../api/apiPrivate";
 
 export function useProfileViewModel() {
 
@@ -43,7 +43,7 @@ export function useProfileViewModel() {
                 password: form.password || undefined
             };
 
-            await api.put("/myuser/profile", payload);
+            await apiPrivate.put("/myuser/profile", payload);
 
             alert("Profile updated!");
 
@@ -65,7 +65,7 @@ export function useProfileViewModel() {
         if (ordersLoaded) return; // prevent spam calls
 
         try {
-            const res = await api.get("/orders");
+            const res = await apiPrivate.get("/orders");
 
             setOrders(res.data?.data || []);
             setOrdersLoaded(true);

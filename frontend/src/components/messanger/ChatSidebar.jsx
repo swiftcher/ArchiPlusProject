@@ -1,8 +1,10 @@
 import { useEffect, useState,useContext } from "react";
-import api from "../../api/axios";
+
+import apiPrivate from "../../api/apiPrivate";
 import socket from "../../pages/socket";
 
   import { AuthContext } from "../../context/AuthContext";
+
 
 export default function ChatSidebar({
     activeConversation,
@@ -15,7 +17,7 @@ export default function ChatSidebar({
     useEffect(() => {
     if (!user.id) return;
 
-    api.get("/users/conversations")
+    apiPrivate.get("/users/conversations")
     .then(res => {
         console.log("CONVOS:", res.data);
         setChats(res.data);
@@ -25,51 +27,45 @@ export default function ChatSidebar({
 
 useEffect(() => {
 
-    const handleNewMessage = (msg) => {
+    const handleConversationUpdate = (data) => {
 
         setChats((prev) => {
 
-            // check if convo already exists
-            const exists = prev.find(
-                c => c.convo_id === msg.conversation_id
-            );
+            const exists = prev.find(c => c.convo_id === data.convo_id);
 
-            // if convo doesn't exist -> create it
+            // NEW CONVERSATION
             if (!exists) {
-
                 return [
                     {
-                        convo_id: msg.conversation_id,
-                        title: msg.title || "New Conversation",
-                        last_message_time: "New message"
+                        convo_id: data.convo_id,
+                        title: data.title,
+                        last_message_time: data.last_message_time
                     },
                     ...prev
                 ];
             }
 
-            // update existing convo
+            // UPDATE EXISTING
             const updated = prev.map(c =>
-                c.convo_id === msg.conversation_id
+                c.convo_id === data.convo_id
                     ? {
                         ...c,
-                        last_message_time: "New message"
+                        last_message_time: data.last_message_time
                     }
                     : c
             );
 
-            // move active convo to top
-            updated.sort((a) =>
-            a.convo_id === msg.conversation_id ? -1 : 1
-        );
-
-            return updated;
+            // MOVE TO TOP
+            return updated.sort((a, b) =>
+                b.convo_id === data.convo_id ? 1 : 0
+            );
         });
     };
 
-    socket.on("receive_message", handleNewMessage);
+    socket.on("conversation_updated", handleConversationUpdate);
 
     return () => {
-        socket.off("receive_message", handleNewMessage);
+        socket.off("conversation_updated", handleConversationUpdate);
     };
 
 }, []);
@@ -78,7 +74,7 @@ useEffect(() => {
 
 const startSupportChat = async () => {
     try {
-        const res = await api.post("/users/conversations/create-or-get");
+        const res = await apiPrivate.post("/users/conversations/create-or-get");
 
         setActiveConversation(res.data.convo_id);
 
@@ -89,7 +85,7 @@ const startSupportChat = async () => {
 
 const startnewconvo = async () => {
     try {
-        const res = await api.post("/users/conversations/create");
+        const res = await apiPrivate.post("/users/conversations/create",{title: new Date().toLocaleTimeString()});
 
         setActiveConversation(res.data.convo_id);
 
@@ -117,7 +113,7 @@ const startnewconvo = async () => {
                         cursor: "pointer"
                     }}
                 >
-                    💬 {chat.title || "Conversation"}
+                    💬 {chat.title }
 
                     <div style={{ fontSize: 12, opacity: 0.6 }}>
                         {chat.last_message_time}

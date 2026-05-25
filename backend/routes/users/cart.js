@@ -11,7 +11,7 @@ const verifyToken = require('../../middleware/authMiddleware');
 router.post('/', verifyToken, (req, res) => {
     
     const P_ID = req.body.P_ID;
-    const Quantity = req.body.Quantity;
+    const QuantityToAdd = req.body.increment;
 
     const U_ID = req.user.U_ID;
     
@@ -37,7 +37,7 @@ router.post('/', verifyToken, (req, res) => {
                 WHERE U_ID = ? AND P_ID = ?
             `;
 
-            return db.query(updateSql, [Quantity, U_ID, P_ID], (err2) => {
+            return db.query(updateSql, [QuantityToAdd, U_ID, P_ID], (err2) => {
                 if (err2) {
                     return res.status(500).json({
                         success: false,
@@ -58,7 +58,7 @@ router.post('/', verifyToken, (req, res) => {
             VALUES (?, ?, ?)
         `;
 
-        db.query(insertSql, [U_ID, P_ID, Quantity], (err3) => {
+        db.query(insertSql, [U_ID, P_ID, QuantityToAdd], (err3) => {
             if (err3) {
                 return res.status(500).json({
                     success: false,

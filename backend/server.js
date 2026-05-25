@@ -46,11 +46,12 @@ const server = http.createServer(app);
 
 // attach socket
 const initSocket = require("./routes/users/messages");
-initSocket(server, db);
+const io = initSocket(server, db);
+app.set("io", io);
 
 // start server
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => {
+server.listen(5000,"0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`);
 });

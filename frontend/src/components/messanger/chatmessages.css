@@ -1,31 +1,56 @@
-.chat-messages {
+.chat-messages-container {
+    flex: 1;
+    overflow-y: auto;
+
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    padding: 16px;
+
+    min-height: 0;
 }
 
-/* Base message bubble */
-.chat-messages div {
+/* each message row */
+.message-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* my messages */
+.message-row.mine {
+    align-items: flex-end;
+}
+
+/* bubble */
+.message-bubble {
     max-width: 65%;
     padding: 10px 14px;
     border-radius: 16px;
     font-size: 14px;
     line-height: 1.4;
     word-wrap: break-word;
+
+    background: #e5e7eb;
+    color: #111827;
 }
 
-/* My messages */
-.my-message {
-    align-self: flex-end;
+/* my bubble */
+.message-row.mine .message-bubble {
     background: #4f46e5;
     color: white;
     border-bottom-right-radius: 4px;
 }
 
-/* Other messages */
-.their-message {
-    align-self: flex-start;
-    background: #e5e7eb;
-    color: #111827;
+/* other bubble */
+.message-row:not(.mine) .message-bubble {
     border-bottom-left-radius: 4px;
+}
+
+/* time */
+.message-time {
+    font-size: 11px;
+    margin-top: 4px;
+    color: #6b7280;
 }

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import apiPrivate from "../api/apiPrivate";
 
 export default function VerifyEmail() {
 
@@ -12,30 +13,15 @@ export default function VerifyEmail() {
         console.log("TOKEN:", token);
 
         const verifyEmail = async () => {
+        try {
+            const res = await apiPrivate.post("/auth/verify-email", {
+            token
+            });
 
-            try {
-
-                const res = await fetch(
-                    "http://localhost:5000/api/auth/verify-email",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-
-                        body: JSON.stringify({ token })
-                    }
-                );
-
-                const data = await res.json();
-
-                console.log(data);
-
-            } catch (err) {
-
-                console.error(err);
-            }
+            console.log(res.data);
+        } catch (err) {
+            console.error(err);
+        }
         };
 
         if (token) {

@@ -5,10 +5,29 @@ const router = express.Router();
 const db = require('../../db');
 const verifyToken = require('../../middleware/authMiddleware');
 
+router.get("/:conversationId", (req, res) => {
+
+    const sql = `
+        SELECT *
+        FROM messages
+        WHERE conversation_id = ?
+        ORDER BY created_at ASC
+    `;
+
+    db.query(sql, [req.params.conversationId], (err, results) => {
+
+        if (err) {
+            return res.status(500).json(err);
+        }
+
+        res.json(results);
+    });
+});
+
 router.get("/", verifyToken,(req, res) => {
     console.log("HEADERS:", req.headers.authorization);
     console.log("USER OBJECT:", req.user);
-    console.log("USER OBJECT:", req.user.U_ID);
+    console.log("USER id:", req.user.U_ID);
     const userId = req.user.U_ID; // correct field
 
 
@@ -96,15 +115,17 @@ router.post("/create-or-get", verifyToken,(req, res) => {
     });
 });
 router.post("/create", verifyToken, (req, res) => {
+
     const userId = req.user.U_ID;
     const adminId = 3;
 
     const insertConv = `
         INSERT INTO conversations (title)
-        VALUES ('Support')
+        VALUES (?)
     `;
 
-    db.query(insertConv, (err, convRes) => {
+    db.query(insertConv, [req.body.title || null], (err, convRes) => {
+
         if (err) return res.status(500).json(err);
 
         const convoId = convRes.insertId;
@@ -122,30 +143,29 @@ router.post("/create", verifyToken, (req, res) => {
             db.query(insertUserSql, [convoId, adminId], (err2) => {
                 if (err2) return res.status(500).json(err2);
 
-                return res.json({
+                // ✅ SOCKET MUST BE HERE (INSIDE CALLBACK)
+                const io = req.app.get("io");
+
+                const newConversation = {
                     convo_id: convoId,
-                    title: "Support"
-                });
+                    title: req.body.title || `Conversation ${convoId}`,
+                    last_message_time: new Date()
+                };
+
+                io.to(`user_${userId}`).emit(
+                    "conversation_updated",
+                    newConversation
+                );
+
+                io.to(`user_${adminId}`).emit(
+                    "conversation_updated",
+                    newConversation
+                );
+
+                // ✅ SEND RESPONSE ONLY ONCE
+                return res.json(newConversation);
             });
         });
-    });
-});
-router.get("/:conversationId", (req, res) => {
-
-    const sql = `
-        SELECT *
-        FROM messages
-        WHERE conversation_id = ?
-        ORDER BY created_at ASC
-    `;
-
-    db.query(sql, [req.params.conversationId], (err, results) => {
-
-        if (err) {
-            return res.status(500).json(err);
-        }
-
-        res.json(results);
     });
 });
 

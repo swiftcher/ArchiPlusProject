@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ProductContext } from "./ProductContext";
-import api from "../api/axios"; 
+import apiPublic from "../api/apiPublic"; 
 
 
 export default function ProductProvider({ children }) {
@@ -9,7 +9,7 @@ export default function ProductProvider({ children }) {
 
   // fetch once
   useEffect(() => {
-  api.get("/products")
+  apiPublic.get("/products")
     .then(res => {
       setProducts(res.data.data || []);
     })

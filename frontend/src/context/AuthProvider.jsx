@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
+
 
 export default function AuthProvider({ children }) {
   const [token, setToken] = useState(() =>
     localStorage.getItem("token")
   );
+   const navigate = useNavigate();
 
   const [user, setUser] = useState(() => {
     const data = localStorage.getItem("user");
@@ -19,6 +22,7 @@ export default function AuthProvider({ children }) {
 
     setToken(null);
     setUser(null);
+    navigate("/auth")
   };
 
   const resetTimer = () => {
@@ -64,7 +68,7 @@ export default function AuthProvider({ children }) {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ token, user, login, logout }}>
+    <AuthContext.Provider value={{ token, user, login, logout,setToken }}>
       {children}
     </AuthContext.Provider>
   );

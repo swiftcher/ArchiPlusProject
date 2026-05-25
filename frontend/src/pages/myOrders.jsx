@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import apiPrivate from "../api/apiPrivate";
 
 
 import Order_Carousel from "../components/OrderStackFolder/Order_Carousel";
@@ -16,11 +16,9 @@ const getOrders = async () => {
     }
 
     try {
-        const res = await fetch("http://localhost:5000/api/orders", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+        const res = await apiPrivate.get("/orders");
+
+        console.log(res.data);
 
         // 2. expired / invalid token
         if (res.status === 401 || res.status === 403) {

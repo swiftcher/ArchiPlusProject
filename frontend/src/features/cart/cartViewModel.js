@@ -1,17 +1,27 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import api from "../../api/axios";
+
+import apiPrivate from "../../api/apiPrivate";
 
 export function useCartViewModel() {
 
     const { token } = useContext(AuthContext);
 
     const [cart, setCart] = useState([]);
+    
     const [loading, setLoading] = useState(true);
 
     // =========================
     // LOAD CART
     // =========================
+    const reloadCart = async () => {
+    try {
+        const res = await apiPrivate.get("cart/userCart");
+        setCart(res.data?.data || []);
+    } catch (err) {
+        console.error(err);
+    }
+};
     useEffect(() => {
 
         const loadCart = async () => {
@@ -29,7 +39,7 @@ export function useCartViewModel() {
 
                 setLoading(true);
 
-                const res = await api.get("cart/userCart");
+                const res = await apiPrivate.get("cart/userCart");
                 console.log(res.data);
                 
 
@@ -56,6 +66,12 @@ export function useCartViewModel() {
     const total = cart.reduce((sum, item) => {
         return sum + item.P_Price * item.Quantity;
     }, 0);
+    // =========================
+    // TOTAL quantity of all items selcted 
+    // =========================
+    const totalQuantity = cart.reduce((sum, item) => {
+    return sum + Number(item.Quantity);
+    }, 0);
 
     // =========================
     // CHECKOUT
@@ -64,7 +80,7 @@ export function useCartViewModel() {
 
         try {
 
-            const res = await api.post("/cart");
+            const res = await apiPrivate.post("/cart");
 
             console.log(res.data);
 
@@ -85,6 +101,8 @@ export function useCartViewModel() {
         cart,
         loading,
         total,
-        handleCheckout
+        handleCheckout,
+        reloadCart,
+        totalQuantity 
     };
 }

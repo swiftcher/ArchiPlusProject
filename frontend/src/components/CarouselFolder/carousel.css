@@ -1,21 +1,41 @@
+/* =========================
+   PRODUCT CAROUSEL
+========================= */
 .carousel {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
+    display: flex;
+    gap: 18px;
+
+    padding: 18px;
+
+    overflow-x: auto;
+
+    scroll-behavior: smooth;
+
+    background: transparent;
 }
 
-/* hide scrollbar (clean UI) */
+/* hide scrollbar */
 .carousel::-webkit-scrollbar {
-  display: none;
-}
-.carousel {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+    display: none;
 }
 
-/* each card should not shrink */
+.carousel {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* cards inside */
 .carousel > * {
-  flex: 0 0 auto;
+    flex: 0 0 auto;
+}
+
+/* optional: soft fade edges effect */
+.carousel {
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 10%,
+        black 90%,
+        transparent
+    );
 }

@@ -1,7 +1,35 @@
+/* =========================
+   CHECKOUT PAGE WRAPPER
+========================= */
+.checkout {
+    width: 100%;
+    min-height: 100vh;
 
-/* COMMON STATE CONTAINER */
+    padding: 40px 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background: linear-gradient(180deg, #f5f9ff 0%, #eef4ff 100%);
+}
+
+.checkout h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 25px;
+    letter-spacing: -0.5px;
+}
+
+/* =========================
+   STATE BOX (login / empty)
+========================= */
 .cart-state {
-    height: 60vh;
+    width: 100%;
+    max-width: 520px;
+
+    height: 55vh;
 
     display: flex;
     flex-direction: column;
@@ -10,48 +38,264 @@
 
     text-align: center;
 
-    color: #e90a36;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: 16px;
+
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
 }
 
-/* ICON / TITLE */
 .cart-state h2 {
-    font-size: 24px;
-    margin-bottom: 8px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1d4ed8;
+    margin-bottom: 10px;
 }
 
-/* TEXT */
 .cart-state p {
     font-size: 14px;
-    color: #6e737c;
+    color: #64748b;
     margin-bottom: 16px;
 }
 
-/* BUTTON */
+/* button */
 .cart-state button {
     padding: 10px 18px;
 
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
 
-    background: #38bdf8;
-    color: #0f172a;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
 
-    font-weight: bold;
+    font-weight: 600;
+
     cursor: pointer;
 
     transition: all 0.2s ease;
 }
 
 .cart-state button:hover {
-    background: #0ea5e9;
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
 }
 
-/* EMPTY SPECIAL LOOK */
+/* empty variant */
 .cart-state.empty {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border: 1px dashed rgba(59, 130, 246, 0.25);
+}
+
+/* =========================
+   ORDER SUMMARY CARD
+========================= */
+.cart-summary {
+    width: 100%;
+    max-width: 900px;
+
+    margin-top: 25px;
+
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+
+    padding: 24px;
+
+    border-radius: 16px;
+
+    border: 1px solid rgba(59, 130, 246, 0.12);
+
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+}
+
+.cart-summary h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #0f172a;
+}
+
+.cart-summary p {
+    color: #475569;
+    font-size: 15px;
+}
+
+/* =========================
+   CHECKOUT BUTTON
+========================= */
+.checkout-btn {
+    width: 100%;
+    margin-top: 18px;
+
+    padding: 14px;
+
+    border: none;
     border-radius: 12px;
 
-    padding: 40px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+.checkout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(37, 99, 235, 0.25);
+}
+
+/* =========================
+   FLOATING SUMMARY WRAPPER (LEFT SIDE)
+========================= */
+.summary-wrapper {
+    position: fixed;
+    top: 120px;
+    left: 16px;   /* 👈 moved to LEFT */
+
+    z-index: 5;
+    pointer-events: none; /* 👈 key fix */
+}
+
+/* =========================
+   TOGGLE BUTTON (LEFT FLOATING FAB)
+========================= */
+.summary-toggle {
+     pointer-events: auto; /* 👈 re-enable click */
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.2s ease;
+}
+
+/* hover effect */
+.summary-toggle:hover {
+    transform: scale(1.1);
+}
+
+
+
+.summary-toggle:hover {
+    transform: scale(1.08);
+}
+
+/* =========================
+   PANEL (COLLAPSIBLE)
+========================= */
+.summary-panel {
+    pointer-events: none;
+    margin-top: 12px;
+
+    width: 320px;
+    max-height: calc(100vh - 140px);
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    padding: 18px;
+
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(59, 130, 246, 0.18);
+    border-radius: 16px;
+
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+
+    overflow: hidden;
+
+    /* animation */
+    transform: translateY(-10px);
+    opacity: 0;
+    pointer-events: none;
+
+    transition: all 0.25s ease;
+}
+
+/* OPEN STATE */
+.summary-panel.open {
+    pointer-events: auto;
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* TITLE */
+.summary-panel h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+
+    padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(148, 163, 184, 0.6);
+}
+
+/* ROWS */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 14px;
+    color: #475569;
+}
+
+/* TOTAL */
+.summary-total {
+    margin-top: 10px;
+    padding-top: 10px;
+
+    border-top: 1px dashed rgba(148, 163, 184, 0.6);
+
+    display: flex;
+    justify-content: space-between;
+
+    font-weight: 700;
+    color: #1d4ed8;
+}
+
+/* BUTTON */
+.summary-panel button {
+    margin-top: 14px;
+
+    width: 100%;
+    padding: 12px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.summary-panel button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
 }

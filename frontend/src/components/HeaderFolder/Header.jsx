@@ -75,12 +75,11 @@ function Header() {
 
         {/* messages */}
         {isLoggedIn && (
-          <i div
-          className="message-icon"
-          onClick={() => navigate("/messenger")}
-        >
-          📩
-        </i>
+          <div className="message-icon"
+          onClick={() => navigate("/messenger")}>
+            📩
+
+          </div>
             
           )}
 

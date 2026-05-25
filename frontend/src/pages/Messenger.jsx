@@ -5,7 +5,7 @@ import socket from "../pages/socket";
 import ChatSidebar from "../components/messanger/ChatSidebar";
 import ChatMessages from "../components/messanger/ChatMessages";
 import ChatInput from "../components/messanger/ChatInput";
-import api from "../api/axios";
+import apiPrivate from "../api/apiPrivate";
 
 import "./messenger.css";
 
@@ -22,7 +22,7 @@ export default function Messenger() {
 
     if (!activeConversation) return;
 
-    api.get(`/users/conversations/${activeConversation}`)
+    apiPrivate.get(`/users/conversations/${activeConversation}`)
         .then(res => setMessages(res.data))
         .catch(err => console.log(err));
 
@@ -45,18 +45,26 @@ export default function Messenger() {
 
     // RECEIVE MESSAGES
     useEffect(() => {
-        const handleMessage = (msg) => {
-            setMessages((prev) => {
-                const exists = prev.some(m => m.id === msg.id);
-                if (exists) return prev;
-                return [...prev, msg];
-            });
-        };
 
-        socket.on("receive_message", handleMessage);
+    const handleMessage = (msg) => {
 
-        return () => socket.off("receive_message", handleMessage);
-    }, []);
+        if (msg.conversation_id !== activeConversation) return;
+
+        setMessages((prev) => {
+
+            const exists = prev.some(m => m.id === msg.id);
+
+            if (exists) return prev;
+
+            return [...prev, msg];
+        });
+    };
+
+    socket.on("receive_message", handleMessage);
+
+    return () => socket.off("receive_message", handleMessage);
+
+}, [activeConversation]);
 
         
     // SEND MESSAGE
