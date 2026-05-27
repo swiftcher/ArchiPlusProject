@@ -9,67 +9,111 @@ const verifyToken = require('../../middleware/authMiddleware');
 // ADD TO Cart 
 
 router.post('/', verifyToken, (req, res) => {
-    
-    const P_ID = req.body.P_ID;
-    const QuantityToAdd = req.body.increment;
 
+    const { P_ID } = req.body;
+    const QuantityToAdd = req.body.increment; // or rename to quantity later
     const U_ID = req.user.U_ID;
-    
 
-    const checkSql = `
-        SELECT * FROM Cart 
-        WHERE U_ID = ? AND P_ID = ?
+    // 1. GET STOCK
+    const stockSql = `
+        SELECT P_Stock 
+        FROM Product 
+        WHERE P_ID = ?
     `;
 
-    db.query(checkSql, [U_ID, P_ID], (err, result) => {
+    db.query(stockSql, [P_ID], (err, stockResult) => {
         if (err) {
             return res.status(500).json({
                 success: false,
-                error: { code: "DB_ERROR", message: "Cart check failed" }
+                message: "Stock check failed"
             });
         }
 
-        // If product already in cart :update quantity
-        if (result.length > 0) {
-            const updateSql = `
-                UPDATE Cart
-                SET Quantity = Quantity + ?
-                WHERE U_ID = ? AND P_ID = ?
-            `;
-
-            return db.query(updateSql, [QuantityToAdd, U_ID, P_ID], (err2) => {
-                if (err2) {
-                    return res.status(500).json({
-                        success: false,
-                        error: { code: "DB_ERROR", message: "Cart update failed" }
-                    });
-                }
-
-                return res.json({
-                    success: true,
-                    data: { message: "Cart updated successfully" }
-                });
+        if (stockResult.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found"
             });
         }
 
-        // If not exists: insert new
-        const insertSql = `
-            INSERT INTO Cart (U_ID, P_ID, Quantity)
-            VALUES (?, ?, ?)
+        const stock = stockResult[0].P_Stock;
+
+        // 2. CHECK CART
+        const cartSql = `
+            SELECT Quantity 
+            FROM Cart 
+            WHERE U_ID = ? AND P_ID = ?
         `;
 
-        db.query(insertSql, [U_ID, P_ID, QuantityToAdd], (err3) => {
-            if (err3) {
+        db.query(cartSql, [U_ID, P_ID], (err2, cartResult) => {
+            if (err2) {
                 return res.status(500).json({
                     success: false,
-                    error: { code: "DB_ERROR", message: "Add to cart failed" }
+                    message: "Cart check failed"
                 });
             }
 
-            return res.status(201).json({
-                success: true,
-                data: { message: "Product added to cart" }
-            });
+            let currentQty = 0;
+
+            if (cartResult.length > 0) {
+                currentQty = cartResult[0].Quantity;
+            }
+
+            const newQty = currentQty + QuantityToAdd;
+
+            // 3. STOCK VALIDATION (IMPORTANT FIX)
+            if (newQty > stock) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Not enough stock"
+                });
+            }
+
+            // 4. UPDATE OR INSERT
+            if (cartResult.length > 0) {
+
+                const updateSql = `
+                    UPDATE Cart
+                    SET Quantity = ?
+                    WHERE U_ID = ? AND P_ID = ?
+                `;
+
+                db.query(updateSql, [newQty, U_ID, P_ID], (err3) => {
+                    if (err3) {
+                        return res.status(500).json({
+                            success: false,
+                            message: "Update failed"
+                        });
+                    }
+
+                    return res.json({
+                        success: true,
+                        message: "Cart updated",
+                        quantity: newQty 
+                    });
+                });
+
+            } else {
+
+                const insertSql = `
+                    INSERT INTO Cart (U_ID, P_ID, Quantity)
+                    VALUES (?, ?, ?)
+                `;
+
+                db.query(insertSql, [U_ID, P_ID, QuantityToAdd], (err4) => {
+                    if (err4) {
+                        return res.status(500).json({
+                            success: false,
+                            message: "Insert failed"
+                        });
+                    }
+
+                    return res.status(201).json({
+                        success: true,
+                        message: "Added to cart"
+                    });
+                });
+            }
         });
     });
 });
@@ -141,16 +185,18 @@ router.put('/:id', verifyToken, (req, res) => {
 
 // DELETE ITEM
 
-router.delete('/:id', verifyToken, (req, res) => {
-    const Cart_ID = req.params.id;
-    const U_ID = req.user.id;
+router.delete('/:P_ID', verifyToken, (req, res) => {
+
+    const P_ID = req.params.P_ID;
+    const U_ID = req.user.U_ID;
 
     const sql = `
         DELETE FROM Cart
-        WHERE Cart_ID = ? AND U_ID = ?
+        WHERE P_ID = ? AND U_ID = ?
     `;
 
-    db.query(sql, [Cart_ID, U_ID], (err, result) => {
+    db.query(sql, [P_ID, U_ID], (err, result) => {
+
         if (err) {
             return res.status(500).json({
                 success: false,
@@ -160,9 +206,89 @@ router.delete('/:id', verifyToken, (req, res) => {
 
         return res.json({
             success: true,
-            data: { message: "Item removed from cart" }
+            message: "Item removed from cart"
         });
     });
 });
 
+router.patch('/decrease/:P_ID', verifyToken, (req, res) => {
+
+    const P_ID = req.params.P_ID;
+    const U_ID = req.user.U_ID;
+
+    // 1. check current quantity
+    const getSql = `
+        SELECT Quantity 
+        FROM Cart 
+        WHERE U_ID = ? AND P_ID = ?
+    `;
+
+    db.query(getSql, [U_ID, P_ID], (err, result) => {
+
+        if (err) {
+            return res.status(500).json({
+                success: false,
+                message: "DB error"
+            });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Item not in cart"
+            });
+        }
+
+        const currentQty = result[0].Quantity;
+
+        // 2. if quantity is 1 → delete row
+        if (currentQty <= 1) {
+
+            const deleteSql = `
+                DELETE FROM Cart
+                WHERE U_ID = ? AND P_ID = ?
+            `;
+
+            db.query(deleteSql, [U_ID, P_ID], (err2) => {
+
+                if (err2) {
+                    return res.status(500).json({
+                        success: false,
+                        message: "Delete failed"
+                    });
+                }
+
+                return res.json({
+                    success: true,
+                    message: "Item removed from cart"
+                });
+            });
+
+        } 
+        // 3. else decrease quantity
+        else {
+
+            const updateSql = `
+                UPDATE Cart
+                SET Quantity = Quantity - 1
+                WHERE U_ID = ? AND P_ID = ?
+            `;
+
+            db.query(updateSql, [U_ID, P_ID], (err3) => {
+
+                if (err3) {
+                    return res.status(500).json({
+                        success: false,
+                        message: "Update failed"
+                    });
+                }
+
+                return res.json({
+                    success: true,
+                    message: "Quantity decreased"
+                });
+            });
+        }
+    });
+});
 module.exports = router;

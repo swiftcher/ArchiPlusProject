@@ -9,13 +9,14 @@
 
 .messenger-card {
     width: 950px;
-    height: 100%;
-    max-height: 100%;
+    height: calc(100vh - 68px);
+    max-height: calc(100vh - 68px);
     display: flex;
     border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
     background: white;
+    position: relative;
 
     
     

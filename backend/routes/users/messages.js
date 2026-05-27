@@ -77,7 +77,8 @@ function initSocket(server, db) {
                             {
                                 convo_id: conversation_id,
                                 last_message: content,
-                                last_message_time: new Date()
+                                last_message_time: new Date(),
+                                sender_id: sender_id
                             }
                         );
                     });

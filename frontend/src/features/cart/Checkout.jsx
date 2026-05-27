@@ -66,6 +66,7 @@ const grandTotal = cart.reduce((sum, item) => {
             <h3>Order Summary</h3>
 
             <p>Total: ${grandTotal.toFixed(2)}</p>
+            
 
             <button
                 className="checkout-btn"

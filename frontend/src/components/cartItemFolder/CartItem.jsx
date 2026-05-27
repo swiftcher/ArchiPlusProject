@@ -1,6 +1,8 @@
 import QuantityCard from "../quantityAddFolder/quantityCard";
 import "./carItem.css";
 
+
+import apiPrivate from "../../api/apiPrivate";
 function CartItem({
     
     P_Name,
@@ -11,7 +13,42 @@ function CartItem({
     Quantity,
     itemTotal,
     reloadCart
-}) {
+}) 
+{
+
+  
+
+
+    // THIS is your "handleSubmit style"
+   const handleDecrease = async () => {
+  try {
+    const res = await apiPrivate.patch(`/cart/decrease/${P_ID}`);
+
+    reloadCart?.();
+    
+    
+    
+
+    console.log(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+   const handleDelete = async () => {
+  try {
+    const res = await apiPrivate.delete(`/cart/${P_ID}`);
+
+    reloadCart?.();
+    
+    
+    
+
+    console.log(res.data);
+  } catch (err) {
+    console.error(err);
+  }
+};
     return (
         <div className="cart-item">
 
@@ -25,6 +62,18 @@ function CartItem({
 
                 <p>Quantity: {Quantity}</p>
                 <p>Stock: {P_Stock}</p>
+
+        
+            <div className="del-control">
+                <button className="del-btn" onClick={handleDelete}>❌</button>
+            </div>
+        
+
+         <div className="dec-wrapper">
+            <div className="dec-control">
+                <button className="dec-btn" onClick={handleDecrease}>Remove one item -</button>
+            </div>
+        </div>
                 <QuantityCard stock={P_Stock} 
                 P_ID={P_ID} 
                 Quantity = {Quantity}
@@ -34,6 +83,7 @@ function CartItem({
                 <p className="item-total">
                     Total: ${itemTotal}
                 </p>
+
 
               
 

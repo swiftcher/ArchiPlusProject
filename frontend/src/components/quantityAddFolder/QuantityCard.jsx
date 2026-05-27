@@ -39,24 +39,15 @@ function QuantityAddToCart({ stock , P_ID,Quantity,reloadCart  }) {
     // ✅ THIS is your "handleSubmit style"
    const handleAdd = async () => {
   try {
-
-    const newQty = cartItem.Quantity + cartItem.increment;
-    console.log(newQty )
-
-    
-    if (newQty > stock)
-        {
-            console.log("no enough in stock - quantitycard log")
-             return ;
-
-        }
-
     const res = await apiPrivate.post("/cart", cartItem);
+
+    reloadCart?.();
     setCartItem(prev => ({
     ...prev,
-    Quantity: newQty
+    Quantity: res.Quantity,
+    increment:1
     })); 
-    reloadCart?.();
+    
     
 
     console.log(res.data);

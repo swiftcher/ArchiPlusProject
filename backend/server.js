@@ -9,7 +9,11 @@ const db = require("./db");
 const app = express();
 
 // middleware
-app.use(cors());
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -51,6 +55,11 @@ app.set("io", io);
 
 // start server
 const PORT = process.env.PORT || 5000;
+
+app.use((req, res, next) => {
+    console.log("REQUEST:", req.method, req.url);
+    next();
+});
 
 server.listen(5000,"0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`);

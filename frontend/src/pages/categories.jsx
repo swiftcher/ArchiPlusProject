@@ -2,23 +2,39 @@ import { useContext, useState } from "react";
 import { ProductContext } from "../context/ProductContext";
 import ProductCard from "../components/ProductFolder/ProductCard";
 import "./categories.css";
+import { useSearchParams } from "react-router-dom";
+
+
+
 
 export default function Categories() {
+  
   const { filteredProducts } = useContext(ProductContext);
 
-  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const productsPerPage = 12;
 
-  // filter logic
-  const filtered = filteredProducts.filter((p) => {
+
+const [searchParams, setSearchParams] = useSearchParams();
+
+  const selectedCategory = searchParams.get("cat") || "all";
+
+const filtered = filteredProducts.filter((p) => {
   if (selectedCategory === "all") return true;
 
-  return (
-    p.Cat_Name?.toLowerCase() === selectedCategory.toLowerCase()
-  );
+  return p.Cat_Name?.toLowerCase() === selectedCategory.toLowerCase();
 });
+
+
+
+
+
+  // filter logic
+  
 
   // pagination logic
   const indexOfLast = currentPage * productsPerPage;
@@ -27,7 +43,7 @@ export default function Categories() {
 
   const totalPages = Math.ceil(filtered.length / productsPerPage);
 
-  const categories = ["all", "3DPrinted", "Digital Art", "Material Art", "Fabrics"];
+  const categories = ["all", "3DPrinted", "Digital Art", "Material Art", "Fabrics","Canvas"];
 
   return (
     <div className="categories-page">
@@ -42,9 +58,9 @@ export default function Categories() {
             key={cat}
             className={selectedCategory === cat ? "active" : ""}
             onClick={() => {
-              setSelectedCategory(cat);
-              setCurrentPage(1);
-            }}
+            setCurrentPage(1);
+            setSearchParams(cat === "all" ? {} : { cat });
+          }}
           >
             {cat}
           </button>

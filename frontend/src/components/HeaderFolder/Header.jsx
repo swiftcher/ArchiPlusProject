@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import "./header.css";
 
 import { AuthContext } from "../../context/AuthContext";
+
 import { ProductContext } from "../../context/ProductContext";
 import logo from "../../assets/logo.svg";
 

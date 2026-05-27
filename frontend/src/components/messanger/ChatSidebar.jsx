@@ -4,13 +4,23 @@ import apiPrivate from "../../api/apiPrivate";
 import socket from "../../pages/socket";
 
   import { AuthContext } from "../../context/AuthContext";
+  import "./chatSidebar.css"
 
+    import { useRef } from "react";
 
 export default function ChatSidebar({
     activeConversation,
     setActiveConversation,
     
 }) {
+
+
+const activeConversationRef = useRef(null);
+useEffect(() => {
+    activeConversationRef.current = activeConversation;
+}, [activeConversation]);
+
+
     const {  user } = useContext(AuthContext);
     const [chats, setChats] = useState([]);
 
@@ -48,18 +58,29 @@ useEffect(() => {
             // UPDATE EXISTING
             const updated = prev.map(c =>
                 c.convo_id === data.convo_id
-                    ? {
-                        ...c,
-                        last_message_time: data.last_message_time
-                    }
-                    : c
+                ? {
+                    ...c,
+                    last_message_time: data.last_message_time,
+                    unread:
+                        data.sender_id !== user.id &&
+                        activeConversationRef.current !== data.convo_id
+                }
+                : c
+                );
+
+            // find updated convo
+            const active = updated.find(
+                c => c.convo_id === data.convo_id
             );
 
-            // MOVE TO TOP
-            return updated.sort((a, b) =>
-                b.convo_id === data.convo_id ? 1 : 0
+            // remove it from array
+            const others = updated.filter(
+                c => c.convo_id !== data.convo_id
             );
-        });
+
+            // put updated convo first
+            return [active, ...others];
+                    });
     };
 
     socket.on("conversation_updated", handleConversationUpdate);
@@ -94,32 +115,56 @@ const startnewconvo = async () => {
     }
 };
 
-    return (
-        <div>
-            <h3>Conversations</h3>
-            <button onClick={startSupportChat}>
+   return (
+    <div className="chat-sidebar-container">
+
+        <h3 className="chat-sidebar-title">
+            Conversations
+        </h3>
+
+        <button className="chat-sidebar-btn" onClick={startSupportChat}>
             💬 Contact Support
-            </button>
-            <button onClick={startnewconvo}>
-            💬 start new convo
-            </button>
+        </button>
+
+        <button className="chat-sidebar-btn secondary" onClick={startnewconvo}>
+            ✨ New Conversation
+        </button>
+
+        <div className="chat-sidebar-list">
 
             {chats.map(chat => (
                 <div
                     key={chat.convo_id}
-                    onClick={() => setActiveConversation(chat.convo_id)}
-                    style={{
-                        fontWeight: activeConversation === chat.convo_id ? "bold" : "normal",
-                        cursor: "pointer"
-                    }}
-                >
-                    💬 {chat.title }
 
-                    <div style={{ fontSize: 12, opacity: 0.6 }}>
+                    onClick={() => {
+
+                        setActiveConversation(chat.convo_id);
+
+                        setChats(prev =>
+                            prev.map(c =>
+                                c.convo_id === chat.convo_id
+                                    ? { ...c, unread: false }
+                                    : c
+                            )
+                        );
+                    }}
+                    className={`chat-sidebar-item
+                    ${activeConversation === chat.convo_id ? "active" : ""}
+                    ${chat.unread ? "unread" : ""}
+                    `}
+                >
+                    <div className="chat-title">
+                        💬 {chat.title}
+                    </div>
+
+                    <div className="chat-meta">
                         {chat.last_message_time}
                     </div>
                 </div>
             ))}
+
         </div>
-    );
+
+    </div>
+);
 }

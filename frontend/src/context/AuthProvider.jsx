@@ -7,7 +7,7 @@ export default function AuthProvider({ children }) {
   const [token, setToken] = useState(() =>
     localStorage.getItem("token")
   );
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState(() => {
     const data = localStorage.getItem("user");
