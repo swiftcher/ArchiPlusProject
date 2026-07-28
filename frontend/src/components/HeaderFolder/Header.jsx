@@ -106,7 +106,7 @@ function Header() {
               {isLoggedIn && (
                 <>
                   <Link to="/myprofile">My Profile</Link>
-                  <Link to="/myOrders">My Orders</Link>
+                 
                 </>
               )}
 

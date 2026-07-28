@@ -49,10 +49,14 @@ const handleSubmit = async (e) => {
       });
 
       const data = res.data;
-
       if (data.token) {
-        login(data);
-        navigate("/home");
+          login(data);
+
+          if (data.user.role === "admin") {
+              navigate("/admin");
+          } else {
+              navigate("/home");
+          }
       }
     }
 

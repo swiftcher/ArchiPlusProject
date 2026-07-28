@@ -47,7 +47,8 @@ router.get('/', verifyToken, (req, res) => {
 // checkout order 
 
 router.post('/checkout', verifyToken, (req, res) => {
-    const U_ID = req.user.id;
+    const U_ID = req.user.U_ID;
+    console.log("Logged user ID:", U_ID);
 
     // 1. Get cart items
     const cartSql = `
@@ -89,15 +90,15 @@ router.post('/checkout', verifyToken, (req, res) => {
 
             // 3. Insert order items
             const orderItemsSql = `
-                INSERT INTO Order_Product (O_ID, P_ID, Quantity, Price)
+                INSERT INTO Order_Product (O_ID, P_ID, Quantity)
                 VALUES ?
             `;
 
             const values = cartItems.map(item => [
                 O_ID,
                 item.P_ID,
-                item.Quantity,
-                item.P_Price
+                item.Quantity
+                
             ]);
 
             db.query(orderItemsSql, [values], (err3) => {
@@ -132,16 +133,22 @@ router.post('/checkout', verifyToken, (req, res) => {
 
 // GET ORDER DETAILS
 
-router.get('/:id', verifyToken, (req, res) => {
+router.get('/orderDetails/:id', verifyToken, (req, res) => {
     const O_ID = req.params.id;
 
     const sql = `
-        SELECT o.O_ID, o.O_Status, o.O_Date,
-        p.P_Name, op.Quantity, op.Price
-        FROM Orders o
-        JOIN Order_Product op ON o.O_ID = op.O_ID
-        JOIN Product p ON op.P_ID = p.P_ID
-        WHERE o.O_ID = ?
+        SELECT 
+        o.O_ID,
+        o.O_Status,
+        o.O_Date,
+        p.P_Name,
+        p.P_Price AS UnitPrice,
+        op.Quantity,
+        (p.P_Price * op.Quantity) AS TotalPrice
+    FROM Orders o
+    JOIN Order_Product op ON o.O_ID = op.O_ID
+    JOIN Product p ON op.P_ID = p.P_ID
+    WHERE o.O_ID = ?
     `;
 
     db.query(sql, [O_ID], (err, result) => {
@@ -150,7 +157,7 @@ router.get('/:id', verifyToken, (req, res) => {
                 success: false,
                 error: {
                     code: "DB_ERROR",
-                    message: "Failed to fetch order"
+                    message: err.message
                 }
             });
         }

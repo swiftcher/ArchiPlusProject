@@ -1,0 +1,226 @@
+.admin-reports {
+
+    width: 100%;
+
+}
+
+
+.admin-reports h1 {
+
+    color: #021329;
+
+    margin-bottom: 30px;
+
+}
+
+
+/* FILTER */
+
+.report-filter {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.report-filter input {
+
+    padding: 10px 14px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    outline: none;
+
+}
+
+
+.report-filter input:focus {
+
+    border-color: #021329;
+
+}
+
+
+.report-filter button {
+
+    background: #021329;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 20px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+}
+
+
+.report-filter button:hover {
+
+    background: #0a2a5c;
+
+}
+
+
+/* TABLE */
+
+.admin-reports table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: white;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+
+}
+
+
+.admin-reports thead {
+
+    background: #021329;
+
+    color: white;
+
+}
+
+
+.admin-reports th {
+
+    padding: 16px;
+
+    text-align: left;
+
+    font-weight: 600;
+
+}
+
+
+.admin-reports td {
+
+    padding: 15px;
+
+    border-bottom: 1px solid #ececec;
+
+    color: #334155;
+
+}
+
+
+.admin-reports tbody tr:hover {
+
+    background: #f8fafc;
+
+}
+
+
+.admin-reports tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+/* DOWNLOAD BUTTON */
+
+.download-btn {
+
+    margin-top: 25px;
+
+    background: #16a34a;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 24px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    transition: .2s;
+
+}
+
+
+.download-btn:hover {
+
+    background: #15803d;
+
+}
+
+
+/* EMPTY STATE */
+
+.no-report {
+
+    margin-top: 40px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 18px;
+
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width:900px){
+
+.admin-reports{
+
+    overflow-x:auto;
+
+}
+
+.admin-reports table{
+
+    min-width:850px;
+
+}
+
+.report-filter{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+.report-filter input,
+.report-filter button{
+
+    width:100%;
+
+}
+
+}

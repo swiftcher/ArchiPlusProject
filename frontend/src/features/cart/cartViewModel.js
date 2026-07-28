@@ -80,7 +80,7 @@ export function useCartViewModel() {
 
         try {
 
-            const res = await apiPrivate.post("/cart");
+            const res = await apiPrivate.post("/orders/checkout");
 
             console.log(res.data);
 

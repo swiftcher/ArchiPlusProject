@@ -1,0 +1,114 @@
+.admin-dashboard {
+
+    width: 100%;
+
+}
+
+
+
+.admin-dashboard h1 {
+
+    color: #021329;
+
+    margin-bottom: 30px;
+
+}
+
+
+
+/* CARDS */
+
+.admin-cards {
+
+    display: grid;
+
+    grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 25px;
+
+}
+
+
+
+.admin-card {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,0.08);
+
+}
+
+
+
+.admin-card h3 {
+
+    color: #64748b;
+
+    font-size: 15px;
+
+    margin-bottom: 15px;
+
+}
+
+
+
+.admin-card p {
+
+    color: #021329;
+
+    font-size: 35px;
+
+    font-weight: bold;
+
+    margin: 0;
+
+}
+
+.recent-orders{
+
+margin-top:40px;
+background:white;
+padding:25px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+
+}
+
+
+.recent-orders h2{
+
+color:#021329;
+margin-bottom:20px;
+
+}
+
+
+
+.order-row{
+
+display:grid;
+
+grid-template-columns:
+80px 1fr 150px 150px 100px;
+
+padding:15px;
+
+border-bottom:1px solid #eee;
+
+color:#334155;
+
+}
+
+
+
+.order-row:hover{
+
+background:#f8fafc;
+
+}

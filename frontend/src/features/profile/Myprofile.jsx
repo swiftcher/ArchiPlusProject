@@ -44,12 +44,7 @@ export default function MyProfile() {
                         My Orders
                     </button>
 
-                    <button
-                        className={activeTab === "settings" ? "active" : ""}
-                        onClick={() => setActiveTab("settings")}
-                    >
-                        Settings
-                    </button>
+                   
                 </nav>
             </aside>
 
