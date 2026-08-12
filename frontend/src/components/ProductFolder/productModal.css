@@ -1,0 +1,567 @@
+/* ============================================================
+   PRODUCT MODAL OVERLAY
+   ============================================================ */
+
+.product-modal-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(2, 19, 41, 0.65);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 10000;
+}
+
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+
+.product-modal {
+    position: relative;
+
+    width: 100%;
+    max-width: 760px;
+
+    max-height: 90vh;
+
+    background: white;
+
+    border-radius: 16px;
+
+    overflow-y: auto;
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.25);
+
+    animation: productModalOpen 0.2s ease;
+}
+
+
+@keyframes productModalOpen {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* ============================================================
+   CLOSE BUTTON
+   ============================================================ */
+
+.product-modal-close {
+    position: absolute;
+
+    top: 14px;
+    right: 16px;
+
+    width: 36px;
+    height: 36px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.92);
+
+    color: #475569;
+
+    font-size: 25px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+
+.product-modal-close:hover {
+    background: white;
+    color: #021329;
+}
+
+
+/* ============================================================
+   IMAGE
+   ============================================================ */
+
+.product-modal-image-wrapper {
+    width: 100%;
+    height: 300px;
+
+    background: #f8fafc;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+
+.product-modal-image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    background: white;
+}
+
+
+.product-modal-no-image {
+    color: #94a3b8;
+
+    font-size: 15px;
+}
+
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+
+.product-modal-content {
+    padding: 28px 30px 32px;
+}
+
+
+/* ============================================================
+   MAIN PRODUCT INFO
+   ============================================================ */
+
+.product-modal-main-info {
+    border-bottom: 1px solid #e5e7eb;
+
+    padding-bottom: 20px;
+}
+
+
+.product-modal-main-info h2 {
+    margin: 6px 0 10px;
+
+    color: #021329;
+
+    font-size: 27px;
+
+    line-height: 1.2;
+}
+
+
+.modal-category {
+    display: inline-block;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.4px;
+}
+
+
+.modal-description {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* ============================================================
+   PRICE / STOCK
+   ============================================================ */
+
+.modal-product-details {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 20px 0;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+.modal-price {
+    color: #021329;
+
+    font-size: 28px;
+
+    font-weight: 700;
+}
+
+
+.modal-stock {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    background: #f0fdf4;
+
+    color: #15803d;
+}
+
+
+.modal-stock-label {
+    font-size: 12px;
+
+    color: #64748b;
+}
+
+
+.modal-stock strong {
+    font-size: 14px;
+}
+
+
+.modal-stock.low {
+    background: #fef2f2;
+
+    color: #dc2626;
+}
+
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+
+.modal-rating,
+.modal-reviews {
+    margin-top: 24px;
+}
+
+
+.modal-section-title {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+
+.modal-section-title h3 {
+    margin: 0;
+
+    color: #021329;
+
+    font-size: 17px;
+}
+
+
+.rating-count {
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+/* ============================================================
+   RATING
+   ============================================================ */
+
+.modal-average-rating {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.modal-stars {
+    display: inline-flex;
+
+    gap: 2px;
+}
+
+
+.modal-star {
+    color: #d1d5db;
+
+    font-size: 19px;
+
+    line-height: 1;
+}
+
+
+.modal-star.filled {
+    color: #f5b301;
+}
+
+
+.modal-average-rating strong {
+    margin-left: 5px;
+
+    color: #021329;
+
+    font-size: 16px;
+}
+
+
+.modal-average-rating > span:last-child {
+    color: #94a3b8;
+
+    font-size: 13px;
+}
+
+
+.no-rating {
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   REVIEWS
+   ============================================================ */
+
+.feedback-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    max-height: 300px;
+
+    overflow-y: auto;
+
+    padding-right: 3px;
+}
+
+
+.feedback-item {
+    padding: 14px 15px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    background: #fafafa;
+}
+
+
+.feedback-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.feedback-user {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.feedback-user strong {
+    color: #021329;
+
+    font-size: 14px;
+}
+
+
+.feedback-user small {
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+.feedback-rating {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    flex-shrink: 0;
+}
+
+
+.feedback-rating .modal-star {
+    font-size: 15px;
+}
+
+
+.feedback-rating > span:last-child {
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+
+.feedback-comment {
+    margin: 10px 0 0;
+
+    color: #475569;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+.feedback-loading {
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+}
+
+
+.no-reviews {
+    padding: 20px;
+
+    background: #f8fafc;
+
+    border-radius: 10px;
+
+    text-align: center;
+}
+
+
+.no-reviews p {
+    margin: 0 0 4px;
+
+    color: #475569;
+
+    font-size: 14px;
+}
+
+
+.no-reviews small {
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+.feedback-list::-webkit-scrollbar,
+.product-modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+.feedback-list::-webkit-scrollbar-thumb,
+.product-modal::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+
+    border-radius: 10px;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .product-modal-overlay {
+        padding: 10px;
+    }
+
+
+    .product-modal {
+        max-height: 94vh;
+
+        border-radius: 13px;
+    }
+
+
+    .product-modal-image-wrapper {
+        height: 220px;
+    }
+
+
+    .product-modal-content {
+        padding: 22px 20px 25px;
+    }
+
+
+    .product-modal-main-info h2 {
+        font-size: 23px;
+    }
+
+
+    .modal-product-details {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+
+    .modal-price {
+        font-size: 25px;
+    }
+
+
+    .feedback-header {
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+
+    .feedback-rating {
+        align-self: flex-start;
+    }
+
+
+    .feedback-list {
+        max-height: 260px;
+    }
+}

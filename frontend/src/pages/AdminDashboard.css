@@ -2,113 +2,964 @@
 
     width: 100%;
 
-}
+    padding-bottom: 40px;
 
+}
 
 
 .admin-dashboard h1 {
 
     color: #021329;
 
-    margin-bottom: 30px;
+    margin-bottom: 5px;
 
 }
 
 
+.dashboard-welcome {
 
-/* CARDS */
+    color: #64748b;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* ============================================================
+   SMALL STAT CARDS
+============================================================ */
 
 .admin-cards {
 
     display: grid;
 
     grid-template-columns:
-    repeat(auto-fit, minmax(220px, 1fr));
+        repeat(
+            auto-fit,
+            minmax(150px, 1fr)
+        );
 
-    gap: 25px;
+    gap: 14px;
 
 }
-
 
 
 .admin-card {
 
     background: white;
 
-    padding: 25px;
+    padding: 16px 18px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,0.06);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.admin-card-label {
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+}
+
+
+.admin-card strong {
+
+    color: #021329;
+
+    font-size: 25px;
+
+}
+
+
+/* ============================================================
+   MAIN PANEL
+============================================================ */
+
+.admin-items-panel {
+
+    margin-top: 28px;
+
+    background: white;
 
     border-radius: 14px;
 
     box-shadow:
-    0 10px 25px rgba(0,0,0,0.08);
+        0 8px 25px rgba(0,0,0,0.07);
+
+    overflow: hidden;
 
 }
 
 
+/* ============================================================
+   HEADER
+============================================================ */
 
-.admin-card h3 {
+.admin-items-header {
 
-    color: #64748b;
+    display: flex;
 
-    font-size: 15px;
+    justify-content: space-between;
 
-    margin-bottom: 15px;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 22px 25px;
+
+    border-bottom: 1px solid #e5e7eb;
 
 }
 
 
+.admin-items-header h2 {
 
-.admin-card p {
+    margin: 0 0 5px;
 
     color: #021329;
 
-    font-size: 35px;
+}
 
-    font-weight: bold;
+
+.admin-items-header p {
 
     margin: 0;
 
-}
+    color: #64748b;
 
-.recent-orders{
-
-margin-top:40px;
-background:white;
-padding:25px;
-border-radius:14px;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    font-size: 14px;
 
 }
 
 
-.recent-orders h2{
+/* ============================================================
+   SEARCH + SORT
+============================================================ */
 
-color:#021329;
-margin-bottom:20px;
+.admin-tools {
 
-}
+    display: flex;
 
+    align-items: center;
 
-
-.order-row{
-
-display:grid;
-
-grid-template-columns:
-80px 1fr 150px 150px 100px;
-
-padding:15px;
-
-border-bottom:1px solid #eee;
-
-color:#334155;
+    gap: 8px;
 
 }
 
 
+.admin-search {
 
-.order-row:hover{
+    width: 280px;
 
-background:#f8fafc;
+    padding: 10px 13px;
 
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 14px;
+
+}
+
+
+.admin-search:focus {
+
+    border-color: #64748b;
+
+}
+
+
+.sort-wrapper {
+
+    position: relative;
+
+}
+
+
+.sort-button {
+
+    width: 42px;
+
+    height: 42px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    background: white;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+}
+
+
+.sort-button:hover {
+
+    background: #f8fafc;
+
+}
+
+
+.sort-menu {
+
+    position: absolute;
+
+    right: 0;
+
+    top: 48px;
+
+    width: 180px;
+
+    background: white;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.15);
+
+    border: 1px solid #e5e7eb;
+
+    overflow: hidden;
+
+    z-index: 100;
+
+}
+
+
+.sort-menu button {
+
+    width: 100%;
+
+    border: none;
+
+    background: white;
+
+    text-align: left;
+
+    padding: 11px 14px;
+
+    cursor: pointer;
+
+    color: #334155;
+
+}
+
+
+.sort-menu button:hover {
+
+    background: #f8fafc;
+
+}
+
+
+/* ============================================================
+   TABLE
+============================================================ */
+
+.admin-table {
+
+    width: 100%;
+
+}
+
+
+.admin-table-head,
+.admin-table-row {
+
+    display: grid;
+
+    grid-template-columns:
+        110px
+        80px
+        minmax(180px, 1fr)
+        150px
+        140px;
+
+    align-items: center;
+
+}
+
+
+.admin-table-head {
+
+    padding: 12px 25px;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+}
+
+
+.admin-table-row {
+
+    padding: 14px 25px;
+
+    border-top: 1px solid #eef2f7;
+
+    color: #334155;
+
+    cursor: pointer;
+
+    transition: background 0.15s ease;
+
+}
+
+
+.admin-table-row:hover {
+
+    background: #f8fafc;
+
+}
+
+
+.admin-table-row strong {
+
+    display: block;
+
+    color: #021329;
+
+}
+
+
+.admin-table-row small {
+
+    display: block;
+
+    color: #94a3b8;
+
+    margin-top: 3px;
+
+    font-size: 12px;
+
+}
+
+
+/* ============================================================
+   TYPE BADGES
+============================================================ */
+
+.type-badge {
+
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+.type-badge.order {
+
+    background: #e0f2fe;
+
+    color: #0369a1;
+
+}
+
+
+.type-badge.product {
+
+    background: #f3e8ff;
+
+    color: #7e22ce;
+
+}
+
+
+/* ============================================================
+   STOCK
+============================================================ */
+
+.stock-ok {
+
+    color: #15803d;
+
+    font-size: 13px;
+
+}
+
+
+.stock-low {
+
+    color: #dc2626;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+.status {
+
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+/* These work with your existing order statuses */
+
+.status.pending {
+
+    background: #fef3c7;
+
+    color: #92400e;
+
+}
+
+
+.status.completed {
+
+    background: #dcfce7;
+
+    color: #166534;
+
+}
+
+
+.status.cancelled {
+
+    background: #fee2e2;
+
+    color: #991b1b;
+
+}
+
+
+.status.processing {
+
+    background: #dbeafe;
+
+    color: #1d4ed8;
+
+}
+
+
+/* ============================================================
+   EMPTY
+============================================================ */
+
+.admin-empty {
+
+    padding: 45px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 900px) {
+
+    .admin-items-header {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+
+    .admin-tools {
+
+        width: 100%;
+
+    }
+
+
+    .admin-search {
+
+        width: 100%;
+
+    }
+
+
+    .admin-table {
+
+        overflow-x: auto;
+
+    }
+
+
+    .admin-table-head,
+    .admin-table-row {
+
+        min-width: 700px;
+
+    }
+
+}
+
+/* ============================================================
+   LOW STOCK CARD
+============================================================ */
+
+.low-stock-card {
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.low-stock-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.low-stock-hint {
+    display: block;
+    margin-top: 6px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   LOW STOCK MODAL
+============================================================ */
+
+.low-stock-modal-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 10000;
+
+    padding: 20px;
+}
+
+
+.low-stock-modal {
+    position: relative;
+
+    width: 90%;
+    max-width: 600px;
+
+    max-height: 80vh;
+
+    overflow-y: auto;
+
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+
+.low-stock-close {
+    position: absolute;
+
+    top: 10px;
+    right: 15px;
+
+    border: none;
+    background: transparent;
+
+    font-size: 30px;
+
+    color: #64748b;
+
+    cursor: pointer;
+
+    line-height: 1;
+}
+
+
+.low-stock-close:hover {
+    color: #021329;
+}
+
+
+.low-stock-modal h2 {
+    margin: 0 0 6px;
+
+    color: #021329;
+}
+
+
+.low-stock-description {
+    margin-top: 0;
+    margin-bottom: 22px;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   LOW STOCK LIST
+============================================================ */
+
+.low-stock-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.low-stock-product {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 14px 16px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+}
+
+
+.low-stock-product-info {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    min-width: 0;
+}
+
+
+.low-stock-product-info strong {
+    color: #021329;
+
+    font-size: 15px;
+}
+
+
+.low-stock-product-info span {
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+.low-stock-product-info small {
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+/* ============================================================
+   STOCK NUMBER
+============================================================ */
+
+.low-stock-number {
+    min-width: 55px;
+
+    text-align: center;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    color: #dc2626;
+}
+
+
+.low-stock-number span {
+    display: block;
+
+    font-size: 10px;
+
+    font-weight: normal;
+
+    color: #64748b;
+}
+
+
+.low-stock-number.critical {
+    color: #991b1b;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+.low-stock-empty {
+    padding: 30px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    background: #f8fafc;
+
+    border-radius: 10px;
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 600px) {
+
+    .low-stock-modal {
+        width: 100%;
+        padding: 22px;
+    }
+
+
+    .low-stock-product {
+        padding: 12px;
+    }
+
+
+    .low-stock-product-info strong {
+        font-size: 14px;
+    }
+
+}
+
+/* ============================================================
+   DASHBOARD DATE FILTER
+============================================================ */
+
+.dashboard-date-filter {
+
+    margin-top: 30px;
+
+    margin-bottom: 25px;
+
+    background: white;
+
+    padding: 18px 20px;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.08);
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.dashboard-date-field {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+}
+
+
+.dashboard-date-field label {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #64748b;
+
+}
+
+
+.dashboard-date-field input {
+
+    padding: 10px 14px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    color: #334155;
+
+}
+
+
+.dashboard-date-field input:focus {
+
+    border-color: #021329;
+
+}
+
+
+.dashboard-filter-button {
+
+    background: #021329;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    transition: .2s;
+
+}
+
+
+.dashboard-filter-button:hover {
+
+    background: #0a2a5c;
+
+}
+
+
+.dashboard-clear-button {
+
+    background: #e5e7eb;
+
+    color: #334155;
+
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    transition: .2s;
+
+}
+
+
+.dashboard-clear-button:hover {
+
+    background: #d1d5db;
+
+}
+
+
+/* ============================================================
+   RESPONSIVE DATE FILTER
+============================================================ */
+
+@media (max-width: 900px) {
+
+    .dashboard-date-filter {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .dashboard-date-field input {
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+    }
+
+
+    .dashboard-filter-button,
+    .dashboard-clear-button {
+
+        width: 100%;
+
+    }
+
+}
+
+/* ============================================================
+   CLICKABLE ADMIN CARD
+   ============================================================ */
+
+.admin-card-clickable {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-card-clickable:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.admin-card-preview {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #64748b;
 }

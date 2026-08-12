@@ -1,7 +1,8 @@
+
 import ProductCard from "../ProductFolder/ProductCard";
 import "./carousel.css";
 
-function ProductCarousel({ products, cart }) {
+function ProductCarousel({ products, cart, onProductClick }) {
 
     return (
         <div className="carousel">
@@ -20,6 +21,7 @@ function ProductCarousel({ products, cart }) {
                         key={product.P_ID}
                         {...product}
                         Quantity={currentQuantity}
+                        onProductClick={onProductClick}
                     />
                 );
             })}
@@ -29,3 +31,4 @@ function ProductCarousel({ products, cart }) {
 }
 
 export default ProductCarousel;
+

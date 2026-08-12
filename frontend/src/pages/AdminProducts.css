@@ -406,3 +406,119 @@ font-weight:bold;
 background:#0a2a5c;
 
 }
+/* ============================================================
+   PRODUCT SEARCH
+   ============================================================ */
+
+.products-search-wrapper {
+
+    position: relative;
+
+    width: 100%;
+
+    margin-bottom: 25px;
+
+}
+
+
+.products-search {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 14px 45px 14px 16px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #021329;
+
+    font-size: 15px;
+
+    outline: none;
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.05);
+
+}
+
+
+.products-search::placeholder {
+
+    color: #94a3b8;
+
+}
+
+
+.products-search:focus {
+
+    border-color: #021329;
+
+    box-shadow:
+        0 0 0 3px rgba(2, 19, 41, 0.08);
+
+}
+
+
+.products-search-clear {
+
+    position: absolute;
+
+    right: 12px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 30px;
+
+    height: 30px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #e2e8f0;
+
+    color: #021329;
+
+    font-size: 20px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+}
+
+
+.products-search-clear:hover {
+
+    background: #cbd5e1;
+
+}
+
+
+/* ============================================================
+   NO SEARCH RESULTS
+   ============================================================ */
+
+.products-no-results {
+
+    padding: 40px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    background: white;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.08);
+
+}
