@@ -8,11 +8,11 @@ export default function AdminRoute({ children }) {
 
     // Not logged in
     if (!user) {
-        return <Navigate to="/auth" />;
+        return <Navigate to="/home" />;
     }
 
     // Logged in but not admin
-    if (user.role !== "admin") {
+    else if (user.role !== "admin") {
         return <Navigate to="/home" />;
     }
 

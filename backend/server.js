@@ -37,12 +37,17 @@ app.use('/api/myuser', require('./routes/users/myuser'));
 
 app.use('/api/admin/products', require('./routes/admin/products'));
 app.use('/api/admin/orders', require('./routes/admin/orders'));
+app.use('/api/paypal', require('./routes/users/paypal'));
 app.use('/api/admin/feedback', require('./routes/admin/feedback'));
 app.use('/api/admin/shipping', require('./routes/admin/shipping'));
 app.use('/api/admin/messages', require('./routes/admin/messages'));
 app.use('/api/admin/reports', require('./routes/admin/reports'));
 app.use('/api/admin/users', require('./routes/admin/mange_users'));
 app.use('/api/admin/category', require('./routes/admin/category'));
+
+const adminMessengerRoutes =
+require("./routes/admin/messenger");
+app.use("/api/admin/messenger",adminMessengerRoutes);
 app.use('/api/users/conversations', require('./routes/users/conversations'));
 
 // create HTTP server (IMPORTANT)

@@ -40,8 +40,8 @@ export default function AdminLayout() {
                         </NavLink>
 
 
-                        <NavLink to="/admin/users">
-                            Users
+                        <NavLink to="/admin/messenger">
+                            messenger
                         </NavLink>
 
 

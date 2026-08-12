@@ -1,170 +1,159 @@
-import { useEffect, useState,useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 
 import apiPrivate from "../../api/apiPrivate";
 import socket from "../../pages/socket";
 
-  import { AuthContext } from "../../context/AuthContext";
-  import "./chatSidebar.css"
+import { AuthContext } from "../../context/AuthContext";
 
-    import { useRef } from "react";
+import "./chatSidebar.css";
 
 export default function ChatSidebar({
-    activeConversation,
-    setActiveConversation,
-    
+  activeConversation,
+  setActiveConversation,
+  isAdmin,
 }) {
+  const { user } = useContext(AuthContext);
 
+  const [chats, setChats] = useState([]);
 
-const activeConversationRef = useRef(null);
-useEffect(() => {
+  const activeConversationRef = useRef(null);
+
+  const currentUserId = user?.id || user?.U_ID;
+
+  useEffect(() => {
     activeConversationRef.current = activeConversation;
-}, [activeConversation]);
+  }, [activeConversation]);
 
+  // LOAD CONVERSATIONS
 
-    const {  user } = useContext(AuthContext);
-    const [chats, setChats] = useState([]);
+  useEffect(() => {
+    if (!currentUserId) return;
 
-    useEffect(() => {
-    if (!user.id) return;
-
-    apiPrivate.get("/users/conversations")
-    .then(res => {
+    apiPrivate
+      .get(isAdmin ? "/admin/messenger" : "/users/conversations")
+      .then((res) => {
         console.log("CONVOS:", res.data);
+
         setChats(res.data);
-    })
+      })
+      .catch((err) => console.log(err));
+  }, [currentUserId]);
 
-}, [user.id]);
+  // SOCKET UPDATES
 
-useEffect(() => {
-
+  useEffect(() => {
     const handleConversationUpdate = (data) => {
+      setChats((prev) => {
+        const exists = prev.find((c) => c.convo_id === data.convo_id);
 
-        setChats((prev) => {
+        // NEW CHAT
 
-            const exists = prev.find(c => c.convo_id === data.convo_id);
+        if (!exists) {
+          return [
+            {
+              ...data,
+              unread: true,
+            },
 
-            // NEW CONVERSATION
-            if (!exists) {
-                return [
-                    {
-                        convo_id: data.convo_id,
-                        title: data.title,
-                        last_message_time: data.last_message_time
-                    },
-                    ...prev
-                ];
-            }
+            ...prev,
+          ];
+        }
 
-            // UPDATE EXISTING
-            const updated = prev.map(c =>
-                c.convo_id === data.convo_id
-                ? {
-                    ...c,
-                    last_message_time: data.last_message_time,
-                    unread:
-                        data.sender_id !== user.id &&
-                        activeConversationRef.current !== data.convo_id
-                }
-                : c
-                );
+        // UPDATE CHAT
 
-            // find updated convo
-            const active = updated.find(
-                c => c.convo_id === data.convo_id
-            );
+        const updated = prev.map((c) =>
+          c.convo_id === data.convo_id
+            ? {
+                ...c,
 
-            // remove it from array
-            const others = updated.filter(
-                c => c.convo_id !== data.convo_id
-            );
+                last_message: data.last_message,
 
-            // put updated convo first
-            return [active, ...others];
-                    });
+                last_message_time: data.last_message_time,
+
+                unread:
+                  data.sender_id !== currentUserId &&
+                  activeConversationRef.current !== data.convo_id,
+              }
+            : c,
+        );
+
+        // MOVE TO TOP
+
+        const current = updated.find((c) => c.convo_id === data.convo_id);
+
+        return [
+          current,
+
+          ...updated.filter((c) => c.convo_id !== data.convo_id),
+        ];
+      });
     };
 
     socket.on("conversation_updated", handleConversationUpdate);
 
     return () => {
-        socket.off("conversation_updated", handleConversationUpdate);
+      socket.off("conversation_updated", handleConversationUpdate);
     };
+  }, [currentUserId]);
 
-}, []);
+  // CREATE / GET SUPPORT CHAT
 
-    
-
-const startSupportChat = async () => {
+  const startSupportChat = async () => {
     try {
-        const res = await apiPrivate.post("/users/conversations/create-or-get");
+      const res = await apiPrivate.post("/users/conversations/create-or-get");
 
-        setActiveConversation(res.data.convo_id);
+      console.log("SUPPORT:", res.data);
 
+      setActiveConversation(res.data.convo_id);
     } catch (err) {
-        console.log("create-or-get error:", err);
+      console.log("CREATE SUPPORT ERROR:", err);
     }
-};
+  };
 
-const startnewconvo = async () => {
-    try {
-        const res = await apiPrivate.post("/users/conversations/create",{title: new Date().toLocaleTimeString()});
-
-        setActiveConversation(res.data.convo_id);
-
-    } catch (err) {
-        console.log("create-or-get error:", err);
-    }
-};
-
-   return (
+  return (
     <div className="chat-sidebar-container">
-
-        <h3 className="chat-sidebar-title">
-            Conversations
-        </h3>
-
+      <h3 className="chat-sidebar-title">Conversations</h3>
+      {!isAdmin && (
         <button className="chat-sidebar-btn" onClick={startSupportChat}>
-            💬 Contact Support
+          💬 Contact Support
         </button>
+      )}
 
-        <button className="chat-sidebar-btn secondary" onClick={startnewconvo}>
-            ✨ New Conversation
-        </button>
+      <div className="chat-sidebar-list">
+        {chats.map((chat) => (
+          <div
+            key={chat.convo_id}
+            onClick={() => {
+              setActiveConversation(chat.convo_id);
 
-        <div className="chat-sidebar-list">
+              setChats((prev) =>
+                prev.map((c) =>
+                  c.convo_id === chat.convo_id
+                    ? {
+                        ...c,
+                        unread: false,
+                      }
+                    : c,
+                ),
+              );
+            }}
+            className={`
+chat-sidebar-item
 
-            {chats.map(chat => (
-                <div
-                    key={chat.convo_id}
+${activeConversation === chat.convo_id ? "active" : ""}
 
-                    onClick={() => {
+${chat.unread ? "unread" : ""}
 
-                        setActiveConversation(chat.convo_id);
+`}
+          >
+            <div className="chat-title">
+              💬 {isAdmin ? `${chat.U_Name} ${chat.U_LastName}` : "Support"}
+            </div>
 
-                        setChats(prev =>
-                            prev.map(c =>
-                                c.convo_id === chat.convo_id
-                                    ? { ...c, unread: false }
-                                    : c
-                            )
-                        );
-                    }}
-                    className={`chat-sidebar-item
-                    ${activeConversation === chat.convo_id ? "active" : ""}
-                    ${chat.unread ? "unread" : ""}
-                    `}
-                >
-                    <div className="chat-title">
-                        💬 {chat.title}
-                    </div>
-
-                    <div className="chat-meta">
-                        {chat.last_message_time}
-                    </div>
-                </div>
-            ))}
-
-        </div>
-
+            <div className="chat-meta">{chat.last_message_time}</div>
+          </div>
+        ))}
+      </div>
     </div>
-);
+  );
 }

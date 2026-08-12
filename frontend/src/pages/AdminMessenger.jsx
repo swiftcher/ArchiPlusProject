@@ -16,25 +16,25 @@ export default function Messenger() {
     const [activeConversation, setActiveConversation] = useState(null);
     const [messages, setMessages] = useState([]);
 
-     useEffect(() => {
+   
+
+    useEffect(() => {
+
+    if (!activeConversation) return;
+
+    apiPrivate.get(`/admin/messenger/${activeConversation}`)
+        .then(res => setMessages(res.data))
+        .catch(err => console.log(err));
+
+}, [activeConversation]);
+
+    useEffect(() => {
 
     if (!user?.id) return;
 
     socket.emit("join_user", currentUserId);
 
 }, [user]);
-
-    useEffect(() => {
-
-    if (!activeConversation) return;
-
-    apiPrivate.get(`/users/conversations/${activeConversation}`)
-        .then(res => setMessages(res.data))
-        .catch(err => console.log(err));
-
-}, [activeConversation]);
-
-  
 
     // JOIN SOCKET ROOM
     useEffect(() => {
@@ -90,7 +90,7 @@ export default function Messenger() {
             <div className="messenger-card">
 
                 <ChatSidebar
-                    isAdmin={false}
+                    isAdmin={true}
                     activeConversation={activeConversation}
                     setActiveConversation={setActiveConversation}
                 />

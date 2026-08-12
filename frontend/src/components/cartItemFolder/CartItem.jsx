@@ -8,7 +8,7 @@ function CartItem({
     P_Name,
     P_Price,
     P_Picture,
-    P_Stock,
+    AvailableStock,
     P_ID,
     Quantity,
     itemTotal,
@@ -61,7 +61,7 @@ function CartItem({
                 <p>Unit Price: ${P_Price}</p>
 
                 <p>Quantity: {Quantity}</p>
-                <p>Stock: {P_Stock}</p>
+                <p>Stock: {AvailableStock}</p>
 
         
             <div className="del-control">
@@ -74,7 +74,7 @@ function CartItem({
                 <button className="dec-btn" onClick={handleDecrease}>Remove one item -</button>
             </div>
         </div>
-                <QuantityCard stock={P_Stock} 
+                <QuantityCard stock={AvailableStock} 
                 P_ID={P_ID} 
                 Quantity = {Quantity}
                 reloadCart ={reloadCart}

@@ -9,7 +9,7 @@ function ProductCard({
     P_Price,
     P_Description,
     P_Picture,
-    P_Stock,
+    AvailableStock,
     Quantity
     
 }) {
@@ -30,12 +30,12 @@ function ProductCard({
 
                 <div className="info">
                     <span>Price: ${P_Price}</span>
-                    <span>Stock: {P_Stock}</span>
+                    <span>Stock: {AvailableStock}</span>
                 </div>
 
                 {/* QUANTITY CONTROLLER */}
                 <QuantityCard
-                    stock={P_Stock}
+                    stock={AvailableStock}
                     P_ID={P_ID}
                     Quantity={Quantity}
                       

@@ -1,172 +1,205 @@
-
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const db = require('../../db');
-const verifyToken = require('../../middleware/authMiddleware');
+const db = require("../../db");
+const verifyToken = require("../../middleware/authMiddleware");
 
-router.get("/:conversationId", (req, res) => {
+// GET MESSAGES
+router.get("/:conversationId", verifyToken, (req, res) => {
+  const sql = `
+SELECT *
+FROM messages
+WHERE conversation_id = ?
+ORDER BY created_at ASC
+`;
 
-    const sql = `
-        SELECT *
-        FROM messages
-        WHERE conversation_id = ?
-        ORDER BY created_at ASC
-    `;
+  db.query(sql, [req.params.conversationId], (err, results) => {
+    if (err) return res.status(500).json(err);
 
-    db.query(sql, [req.params.conversationId], (err, results) => {
-
-        if (err) {
-            return res.status(500).json(err);
-        }
-
-        res.json(results);
-    });
+    res.json(results);
+  });
 });
 
-router.get("/", verifyToken,(req, res) => {
-    console.log("HEADERS:", req.headers.authorization);
-    console.log("USER OBJECT:", req.user);
-    console.log("USER id:", req.user.U_ID);
-    const userId = req.user.U_ID; // correct field
+// GET USER CONVERSATIONS
+router.get("/", verifyToken, (req, res) => {
+  const userId = req.user.U_ID;
+
+  const sql = `
+
+SELECT
+
+c.id AS convo_id,
+
+c.title,
 
 
+(
+SELECT m.content
+FROM messages m
+WHERE m.conversation_id=c.id
+ORDER BY m.created_at DESC
+LIMIT 1
+)
+AS last_message,
 
-    const sql = `
-        SELECT 
-            c.id AS convo_id,
-            c.title,
 
-            (
-                SELECT m.content
-                FROM messages m
-                WHERE m.conversation_id = c.id
-                ORDER BY m.created_at DESC
-                LIMIT 1
-            ) AS last_message,
+(
+SELECT m.created_at
+FROM messages m
+WHERE m.conversation_id=c.id
+ORDER BY m.created_at DESC
+LIMIT 1
+)
+AS last_message_time
 
-            (
-                SELECT m.created_at
-                FROM messages m
-                WHERE m.conversation_id = c.id
-                ORDER BY m.created_at DESC
-                LIMIT 1
-            ) AS last_message_time
 
-        FROM conversations c
-        JOIN conversation_users cu 
-            ON cu.convo_id = c.id
-        WHERE cu.U_ID = ?
-        GROUP BY c.id
-        ORDER BY last_message_time DESC
-    `;
+FROM conversations c
 
-    db.query(sql, [userId], (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ error: "DB error" });
-        }
 
-        res.json(results);
-    });
+JOIN conversation_users cu
+
+ON cu.convo_id=c.id
+
+
+WHERE cu.U_ID=?
+
+
+ORDER BY last_message_time DESC
+
+`;
+
+  db.query(sql, [userId], (err, results) => {
+    if (err) {
+      console.log(err);
+
+      return res.status(500).json(err);
+    }
+
+    res.json(results);
+  });
 });
-router.post("/create-or-get", verifyToken,(req, res) => {
-    const userId = req.user.U_ID;
-    const adminId = 3;
 
-    const checkSql = `
-        SELECT c.id
-        FROM conversations c
-        JOIN conversation_users cu1 ON cu1.convo_id = c.id
-        JOIN conversation_users cu2 ON cu2.convo_id = c.id
-        WHERE cu1.U_ID = ? AND cu2.U_ID = ?
-        LIMIT 1
-    `;
+// CREATE OR GET SUPPORT CHAT
+router.post("/create-or-get", verifyToken, (req, res) => {
+  const userId = req.user.U_ID;
 
-    db.query(checkSql, [userId, adminId], (err, result) => {
+  // CHECK EXISTING CHAT
+
+  const checkSql = `
+
+SELECT c.id
+
+FROM conversations c
+
+
+JOIN conversation_users cu
+
+ON cu.convo_id=c.id
+
+
+WHERE cu.U_ID=?
+
+
+LIMIT 1
+
+`;
+
+  db.query(checkSql, [userId], (err, result) => {
+    if (err) return res.status(500).json(err);
+
+    // ALREADY EXISTS
+
+    if (result.length > 0) {
+      return res.json({
+        convo_id: result[0].id,
+      });
+    }
+
+    // FIND ADMIN
+
+    const adminSql = `
+
+SELECT
+
+U_ID
+
+FROM Users
+
+WHERE U_Role='admin'
+
+LIMIT 1
+
+`;
+
+    db.query(adminSql, (err, admins) => {
+      if (err) return res.status(500).json(err);
+
+      if (admins.length === 0) {
+        return res.status(400).json({
+          message: "No admin available",
+        });
+      }
+
+      const adminId = admins[0].U_ID;
+
+      // CREATE CONVERSATION
+
+      const createSql = `
+
+INSERT INTO conversations(title)
+
+VALUES('Support')
+
+`;
+
+      db.query(createSql, (err, conv) => {
         if (err) return res.status(500).json(err);
 
-        if (result.length > 0) {
-            return res.json({ convo_id: result[0].id });
-        }
+        const convoId = conv.insertId;
 
-        const insertConv = `INSERT INTO conversations (title) VALUES ('Support')`;
+        const addUser = `
 
-        db.query(insertConv, (err2, convRes) => {
-            if (err2) return res.status(500).json(err2);
+INSERT INTO conversation_users
+(convo_id,U_ID)
 
-            const convoId = convRes.insertId;
+VALUES(?,?)
 
-            const insertUserSql = `
-                INSERT INTO conversation_users (convo_id, U_ID)
-                VALUES (?, ?)
-            `;
+`;
 
-            db.query(insertUserSql, [convoId, userId], (err3) => {
-                if (err3) return res.status(500).json(err3);
+        // ADD CUSTOMER
 
-                db.query(insertUserSql, [convoId, adminId], (err4) => {
-                    if (err4) return res.status(500).json(err4);
+        db.query(addUser, [convoId, userId], (err) => {
+          if (err) return res.status(500).json(err);
 
-                    res.json({ convo_id: convoId });
-                });
-            });
+          // ADD ADMIN
+
+          db.query(addUser, [convoId, adminId], (err) => {
+            if (err) return res.status(500).json(err);
+
+            const io = req.app.get("io");
+
+            const conversation = {
+              convo_id: convoId,
+
+              title: "Support",
+
+              last_message_time: new Date(),
+            };
+
+            // NOTIFY USER
+
+            io.to(`user_${userId}`).emit("conversation_updated", conversation);
+
+            // NOTIFY ADMIN
+
+            io.to(`user_${adminId}`).emit("conversation_updated", conversation);
+
+            res.json(conversation);
+          });
         });
+      });
     });
-});
-router.post("/create", verifyToken, (req, res) => {
-
-    const userId = req.user.U_ID;
-    const adminId = 3;
-
-    const insertConv = `
-        INSERT INTO conversations (title)
-        VALUES (?)
-    `;
-
-    db.query(insertConv, [req.body.title || null], (err, convRes) => {
-
-        if (err) return res.status(500).json(err);
-
-        const convoId = convRes.insertId;
-
-        const insertUserSql = `
-            INSERT INTO conversation_users (convo_id, U_ID)
-            VALUES (?, ?)
-        `;
-
-        // add user
-        db.query(insertUserSql, [convoId, userId], (err1) => {
-            if (err1) return res.status(500).json(err1);
-
-            // add admin
-            db.query(insertUserSql, [convoId, adminId], (err2) => {
-                if (err2) return res.status(500).json(err2);
-
-                // ✅ SOCKET MUST BE HERE (INSIDE CALLBACK)
-                const io = req.app.get("io");
-
-                const newConversation = {
-                    convo_id: convoId,
-                    title: req.body.title || `Conversation ${convoId}`,
-                    last_message_time: new Date()
-                };
-
-                io.to(`user_${userId}`).emit(
-                    "conversation_updated",
-                    newConversation
-                );
-
-                io.to(`user_${adminId}`).emit(
-                    "conversation_updated",
-                    newConversation
-                );
-
-                // ✅ SEND RESPONSE ONLY ONCE
-                return res.json(newConversation);
-            });
-        });
-    });
+  });
 });
 
 module.exports = router;

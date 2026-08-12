@@ -1,13 +1,13 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const db = require('../../db');
-const verifyToken = require('../publicRoutes/auth');
-const isAdmin = require('../../middleware/roleAuthMiddleware');
+const db = require("../../db");
+const verifyToken = require("../publicRoutes/auth");
+const isAdmin = require("../../middleware/roleAuthMiddleware");
 
 //GET ALL MESSAGES
-router.get('/', verifyToken, isAdmin, (req, res) => {
-    const sql = `
+router.get("/", verifyToken, isAdmin, (req, res) => {
+  const sql = `
         SELECT m.*, 
         s.U_Name AS Sender_Name,
         r.U_Name AS Receiver_Name
@@ -17,41 +17,41 @@ router.get('/', verifyToken, isAdmin, (req, res) => {
         ORDER BY m.M_ID DESC
     `;
 
-    db.query(sql, (err, result) => {
-        if (err) {
-            return res.status(500).json({
-                success: false,
-                error: { message: "Failed to fetch messages" }
-            });
-        }
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        error: { message: "Failed to fetch messages" },
+      });
+    }
 
-        res.json({ success: true, data: result });
-    });
+    res.json({ success: true, data: result });
+  });
 });
 
 // REPLY TO MESSAGE (send message)
-router.post('/', verifyToken, isAdmin, (req, res) => {
-    const { Receiver_ID, M_Description } = req.body;
-    const Sender_ID = req.user.id;
+router.post("/", verifyToken, isAdmin, (req, res) => {
+  const { Receiver_ID, M_Description } = req.body;
+  const Sender_ID = req.user.id;
 
-    const sql = `
+  const sql = `
         INSERT INTO Messages (Sender_ID, Receiver_ID, M_Description)
         VALUES (?, ?, ?)
     `;
 
-    db.query(sql, [Sender_ID, Receiver_ID, M_Description], (err) => {
-        if (err) {
-            return res.status(500).json({
-                success: false,
-                error: { message: "Message failed" }
-            });
-        }
+  db.query(sql, [Sender_ID, Receiver_ID, M_Description], (err) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        error: { message: "Message failed" },
+      });
+    }
 
-        res.json({
-            success: true,
-            data: { message: "Reply sent" }
-        });
+    res.json({
+      success: true,
+      data: { message: "Reply sent" },
     });
+  });
 });
 
 module.exports = router;

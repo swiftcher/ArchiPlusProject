@@ -6,6 +6,7 @@ import MyOrders from "../pages/myOrders";
 
 import AuthProvider from "../context/AuthProvider";
 import ProductProvider from "../context/ProductProvider";
+import NotificationProvider from "../context/NotificationProvider";
 
 import Categories from "../pages/categories";
 import About from "../pages/about";
@@ -16,15 +17,16 @@ import Messenger from "../pages/Messenger";
 import VerifyEmail from "../pages/verication";
 
 import AdminRoute from "../components/AdminRoutes/AdminRoute";
-import CustomerRoute from "../components/CustomerRoutes/CustomerRoute";
+
 
 import AdminDashboard from "../pages/AdminDashboard";
-
+import CustomerRoute from "../components/CustomerRoutes/CustomerRoute";
 import CustomerLayout from "../Layouts/CustomerLayout";
 import AdminLayout from "../Layouts/AdminLayout";
 import AdminProducts from "../pages/AdminProducts";
 import AdminOrders from "../pages/Adminorders";
 import AdminReports from "../pages/AdminReports";
+import AdminMessenger from "../pages/AdminMessenger";
 
 
 export default function App() {
@@ -33,42 +35,36 @@ export default function App() {
     <BrowserRouter>
 
       <AuthProvider>
-
+        <NotificationProvider>
         <ProductProvider>
 
           <Routes>
+            
 
 
             {/* =========================
                 CUSTOMER AREA
             ========================== */}
 
-            <Route
-              element={
-                <CustomerRoute>
-                  <CustomerLayout />
-                </CustomerRoute>
-              }
-            >
-
-              <Route path="/" element={<Home />} />
-
-              <Route path="/home" element={<Home />} />
-
-              <Route path="/myOrders" element={<MyOrders />} />
-
-              <Route path="/cart" element={<Checkout />} />
-
-              <Route path="/categories" element={<Categories />} />
-
-              <Route path="/about" element={<About />} />
-
-              <Route path="/myprofile" element={<Myprofile />} />
-
-              <Route path="/messenger" element={<Messenger />} />
-
-
+            <Route element={<CustomerLayout />}>
+    <Route path="/" element={<Home />} />
+    <Route path="/home" element={<Home />} />
+    <Route path="/categories" element={<Categories />} />
+    <Route path="/about" element={<About />} />
             </Route>
+
+<Route
+    element={
+        <CustomerRoute>
+            <CustomerLayout />
+        </CustomerRoute>
+    }
+>
+    <Route path="/cart" element={<Checkout />} />
+    <Route path="/myOrders" element={<MyOrders />} />
+    <Route path="/myprofile" element={<Myprofile />} />
+    <Route path="/messenger" element={<Messenger />} />
+</Route>
 
 
 
@@ -106,6 +102,11 @@ element={<AdminOrders/>}
     element={<AdminReports/>}
   />
 
+  <Route
+ path="/admin/messenger"
+ element={<AdminMessenger />}
+/>
+
 </Route>
 
             {/* =========================
@@ -127,6 +128,7 @@ element={<AdminOrders/>}
 
 
         </ProductProvider>
+        </NotificationProvider>
 
       </AuthProvider>
 
