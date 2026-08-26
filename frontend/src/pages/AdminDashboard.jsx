@@ -299,11 +299,6 @@ export default function AdminDashboard() {
           <strong>{stats?.orders ?? 0}</strong>
         </div>
 
-        <div className="admin-card">
-          <span className="admin-card-label">Revenue</span>
-
-          <strong>${Number(stats?.revenue ?? 0).toFixed(2)}</strong>
-        </div>
 
         <div className="admin-card">
           <span className="admin-card-label">Pending orders</span>
@@ -324,6 +319,8 @@ export default function AdminDashboard() {
             {details?.pendingOrders ?? 0}
           </strong>
         </div>
+
+        
 
         {/* ==================================================
             LOW STOCK CARD

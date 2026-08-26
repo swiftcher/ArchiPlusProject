@@ -185,4 +185,31 @@ router.get("/", verifyToken, isAdmin, (req, res) => {
     );
 
 });
+
+// UPDATE STATUS
+
+router.put("/:id/status", verifyToken, isAdmin, (req, res) => {
+  const { status } = req.body;
+
+  const sql = `
+
+UPDATE Orders
+
+SET O_Status=?
+
+WHERE O_ID=?
+
+`;
+
+  db.query(sql, [status, req.params.id], (err, result) => {
+    if (err) {
+      return res.status(500).json(err);
+    }
+
+    res.json({
+      success: true,
+      message: "Status updated",
+    });
+  });
+});
 module.exports = router;

@@ -277,6 +277,7 @@ router.get(
                 ) AS lowStockProducts
 
         `;
+         
 
 
         db.query(

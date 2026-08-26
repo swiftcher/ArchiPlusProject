@@ -3,7 +3,7 @@ import "./order.css";
 import Button from "../ButtonFolder/Button";
 import { useOrderViewModel } from "./OrderViewModel";
 
-function Order({ O_ID, U_ID, O_Status, O_Date }) {
+function Order({ O_ID, O_Status, O_Date }) {
   const { loadOrderDetails, details } = useOrderViewModel();
 
   const [showModal, setShowModal] = useState(false);
@@ -16,9 +16,6 @@ function Order({ O_ID, U_ID, O_Status, O_Date }) {
       </div>
 
       <div className="order-body">
-        <p>
-          <strong>User ID:</strong> {U_ID}
-        </p>
         <p>
           <strong>Date:</strong> {new Date(O_Date).toLocaleDateString()}
         </p>

@@ -34,6 +34,7 @@ export function useAdminDashboardViewModel() {
             const detailsRes = await apiPrivate.get(
                 "/admin/reports/dashboard/details"
             );
+            console.log(detailsRes)
 
             /*
             ====================================================
